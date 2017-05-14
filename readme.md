@@ -7,7 +7,7 @@ Main features:
 * auto-assigning annotated HTTP request handlers to URLs
 * asynchronous processing of requests with preservation of responses order
 
-[TODO Java source code documentation](http://stincmale.github.io/java-instrumentation/apidocs/)
+[Java source code documentation](http://stincmale.github.io/server/apidocs/)
 
 [Contacts](https://sites.google.com/site/aboutmale/board)
 
