@@ -1,7 +1,7 @@
 package stinc.male.server.netty4.tcp.http;
 
 import stinc.male.server.netty4.tcp.DispatchMonoHandler;
-import stinc.male.server.netty4.tcp.http.util.http.HttpUtil;
+import stinc.male.server.netty4.tcp.http.util.HttpUtil;
 import stinc.male.server.util.logging.Mdc;
 import stinc.male.server.reqres.RequestDispatcher;
 import stinc.male.server.netty4.RequestWithMetadata;

@@ -30,6 +30,9 @@ public final class TestExampleSpringHttpServer {
   }
 
   @Inject
+  Server server;
+
+  @Inject
   @Value("${prop.port}")
   private int port;
 

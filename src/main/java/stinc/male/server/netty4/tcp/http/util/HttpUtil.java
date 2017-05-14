@@ -1,4 +1,4 @@
-package stinc.male.server.netty4.tcp.http.util.http;
+package stinc.male.server.netty4.tcp.http.util;
 
 import com.google.common.base.Charsets;
 import io.netty.channel.Channel;

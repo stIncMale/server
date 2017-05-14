@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import javax.annotation.concurrent.ThreadSafe;
 import stinc.male.server.netty4.util.channel.ChannelUtil;
-import stinc.male.server.netty4.tcp.http.util.http.HttpUtil;
+import stinc.male.server.netty4.tcp.http.util.HttpUtil;
 
 @ThreadSafe
 @ChannelHandler.Sharable

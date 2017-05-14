@@ -1,7 +1,7 @@
 package stinc.male.server.example;
 
 import stinc.male.server.netty4.tcp.http.HttpRequestProcessor;
-import stinc.male.server.netty4.tcp.http.util.http.HttpUtil;
+import stinc.male.server.netty4.tcp.http.util.HttpUtil;
 import stinc.male.server.reqres.Processor;
 import stinc.male.server.netty4.RequestWithMetadata;
 import io.netty.handler.codec.http.FullHttpRequest;

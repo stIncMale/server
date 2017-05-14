@@ -228,9 +228,15 @@
             <windowtitle>Server Java Source Code Documentation</windowtitle>
             <groups>
               <group>
-                <title>All</title>
+                <title>Server</title>
                 <packages>
-                  stinc.male.server:stinc.male.server.*
+                  stinc.male.server:stinc.male.server.util:stinc.male.server.util.*:stinc.male.server.reqres:stinc.male.server.reqres.*
+                </packages>
+              </group>
+              <group>
+                <title>Netty4</title>
+                <packages>
+                  stinc.male.server.netty4:stinc.male.server.netty4.*
                 </packages>
               </group>
             </groups>
@@ -293,6 +299,9 @@
     </profile>
     <profile>
       <id>doc</id>
+      <properties>
+        <maven.test.skip>true</maven.test.skip>
+      </properties>
       <build>
         <plugins>
           <plugin>
