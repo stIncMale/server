@@ -23,7 +23,7 @@ import javax.annotation.concurrent.NotThreadSafe;
  * (auto read is desabled in {@link #channelRegistered(ChannelHandlerContext)} and is enabled back again in
  * {@link #handlerRemoved(ChannelHandlerContext)} if it was enabled before disabling).
  * This handler must be placed in the {@link ChannelPipeline} above (after in the inbound/upstream evaluation order) any decoders,
- * and above (before in the outbound/downstream evaluation order) any encoders:<br>
+ * and above (before in the outbound/downstream evaluation order) any encoders:
  * <pre>{@code
  *  ChannelPipeline p = ...;
  *  ...

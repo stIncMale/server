@@ -32,7 +32,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * Processes business logic.
  * Uses {@link RequestDispatcher} to {@linkplain RequestDispatcher#process(java.lang.Object) process} requests.
  * This handler must be placed in the {@link ChannelPipeline} above (after in the inbound/upstream evaluation order) any decoders,
- * and above (before in the outbound/downstream evaluation order) any encoders:<br>
+ * and above (before in the outbound/downstream evaluation order) any encoders:
  * <pre>{@code
  *  ChannelPipeline p = ...;
  *  ...
