@@ -2,7 +2,7 @@ stinc.male.server
 stinc.male.server.netty4
 stinc.male.server.netty4.tcp
 stinc.male.server.netty4.tcp.http
-stinc.male.server.netty4.tcp.http.util.http
+stinc.male.server.netty4.tcp.http.util
 stinc.male.server.netty4.util.channel
 stinc.male.server.reqres
 stinc.male.server.reqres.spring
