@@ -17,9 +17,9 @@ import java.util.Map;
  * <p>
  * <i>Correct</i>:
  * <pre>{@code
- * final TransferableMdc mdc = TransferableMdc.current();
+ * TransferableMdc mdc = TransferableMdc.current();
  * executor.submit(() -> {
- *  try (@SuppressWarnings("unused") Mdc mdcTmp = mdc.apply()) {
+ *  try (Mdc mdcTmp = mdc.apply()) {
  *      logger.info("This call can access contents of mdc via org.slf4j.MDC");
  *  }
  *  logger.info("This call can not access contents of mdc via org.slf4j.MDC");
@@ -28,17 +28,16 @@ import java.util.Map;
  * <i>Incorrect 1</i>:
  * <pre>{@code
  * executor.submit(() -> {
- *  try (@SuppressWarnings("unused") Mdc mdcTmp = TransferableMdc.current().apply()) {
- *      logger.info("This call can access contents of mdc via org.slf4j.MDC");
+ *  try (Mdc mdcTmp = TransferableMdc.current().apply()) {
+ *      //...
  *  }
- *  logger.info("This call can not access contents of mdc via org.slf4j.MDC");
  * });
  * }</pre>
  * This is incorrect because this way we do not have access to the context data of the "parent" thread.
  * <p>
  * <i>Incorrect 2</i>:
  * <pre>{@code
- * final TransferableMdc mdc = TransferableMdc.current();
+ * TransferableMdc mdc = TransferableMdc.current();
  * executor.submit(() -> {//task1
  *  try (TransferableMdc mdcTmp = mdc.apply()) {
  *      //...
@@ -54,7 +53,7 @@ import java.util.Map;
  * methods {@link #apply()} and {@link #close()} may be executed concurrently, but these methods are not thread-safe.
  * The simple way to fix the incorrect example is as follows:
  * <pre>{@code
- * final TransferableMdc mdc1 = TransferableMdc.current();
+ * TransferableMdc mdc1 = TransferableMdc.current();
  * executor.submit(() -> {//task1
  *  try (TransferableMdc mdcTmp = mdc1.apply()) {
  *      //...

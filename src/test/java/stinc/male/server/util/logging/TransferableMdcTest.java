@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.junit.AfterClass;
 import org.junit.Test;
+import org.slf4j.Logger;
 import org.slf4j.MDC;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertSame;
@@ -34,7 +35,7 @@ public final class TransferableMdcTest {
     executor.submit(() -> {
       final String value = "v";
       MDC.put(key, value);
-      try (@SuppressWarnings("unused") final TransferableMdc mdcTmp = mdc.apply()) {
+      try (final TransferableMdc mdcTmp = mdc.apply()) {
         assertSame(valueTransferred, MDC.get(keyTransferred));
         assertSame(value, MDC.get(key));
       }

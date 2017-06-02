@@ -83,7 +83,7 @@ public class HttpDispatchMonoHandler extends DispatchMonoHandler<RequestWithMeta
       final TransferableMdc mdc = TransferableMdc.current();
       return dispatcher.process(request)
           .handle((httpResponse, failure) -> {
-            try (@SuppressWarnings("unused") final TransferableMdc mdcTmp = mdc.apply()) {
+            try (final TransferableMdc mdcTmp = mdc.apply()) {
               if (failure != null) {
                 throw new RuntimeException(failure);
               }

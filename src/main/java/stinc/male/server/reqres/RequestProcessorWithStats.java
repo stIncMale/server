@@ -42,7 +42,7 @@ public final class RequestProcessorWithStats<RQ, RS> implements RequestProcessor
     final TransferableMdc mdc = TransferableMdc.current();
     return processor.process(request)
         .handle((response, failure) -> {
-          try (@SuppressWarnings("unused") final TransferableMdc mdcTmp = mdc.apply()) {
+          try (final TransferableMdc mdcTmp = mdc.apply()) {
             final long endInstantMillis = System.currentTimeMillis();
             collectStats(endInstantMillis - beginInstantMillis);
             if (failure != null) {
