@@ -59,7 +59,7 @@ import java.util.Map;
  *      //...
  *  }
  * });
- * final TransferableMdc mdc2 = TransferableMdc.current();
+ * TransferableMdc mdc2 = TransferableMdc.current();
  * executor.submit(() -> {//task2
  *  try (TransferableMdc mdcTmp = mdc2.apply()) {
  *      //...
