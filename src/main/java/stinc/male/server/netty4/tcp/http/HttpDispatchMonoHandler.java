@@ -2,7 +2,7 @@ package stinc.male.server.netty4.tcp.http;
 
 import stinc.male.server.netty4.tcp.DispatchMonoHandler;
 import stinc.male.server.netty4.tcp.http.util.HttpUtil;
-import stinc.male.server.util.logging.Mdc;
+import stinc.male.server.util.logging.TransferableMdc;
 import stinc.male.server.reqres.RequestDispatcher;
 import stinc.male.server.netty4.RequestWithMetadata;
 import stinc.male.server.util.throwable.ExternallyVisibleException;
@@ -80,10 +80,10 @@ public class HttpDispatchMonoHandler extends DispatchMonoHandler<RequestWithMeta
 
     @Override
     public final CompletionStage<FullHttpResponse> process(final RequestWithMetadata<? extends FullHttpRequest> request) {
-      final Mdc mdc = Mdc.current();
+      final TransferableMdc mdc = TransferableMdc.current();
       return dispatcher.process(request)
           .handle((httpResponse, failure) -> {
-            try (@SuppressWarnings("unused") final Mdc mdcTmp = mdc.apply()) {
+            try (@SuppressWarnings("unused") final TransferableMdc mdcTmp = mdc.apply()) {
               if (failure != null) {
                 throw new RuntimeException(failure);
               }

@@ -1,47 +1,35 @@
 package stinc.male.server.util.logging;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import java.util.concurrent.ForkJoinPool;
 import org.junit.Test;
 import org.slf4j.MDC;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertSame;
 
-public class MdcTest {
-  private static volatile ExecutorService executor;
+public final class TransferableMdcTest {
 
-  public MdcTest() {
-  }
-
-  @BeforeClass
-  public static final void beforeClass() {
-    executor = Executors.newSingleThreadExecutor();
-  }
-
-  @AfterClass
-  public static final void afterClass() {
-    executor.shutdownNow();
+  public TransferableMdcTest() {
   }
 
   @Test
   public final void idiom() {
     final String keyTransferred = "kTransferred";
+    final String key = "k";
     final String valueTransferred = "vTransferred";
     MDC.put(keyTransferred, valueTransferred);
-    final Mdc mdc = Mdc.current();
-    executor.submit(() -> {
-      final String key = "k";
+    final TransferableMdc mdc = TransferableMdc.current();
+    ForkJoinPool.commonPool().submit(() -> {
       final String value = "v";
       MDC.put(key, value);
-      try (@SuppressWarnings("unused") Mdc mdcTmp = mdc.apply()) {
+      try (@SuppressWarnings("unused") final TransferableMdc mdcTmp = mdc.apply()) {
         assertSame(valueTransferred, MDC.get(keyTransferred));
         assertSame(value, MDC.get(key));
       }
       assertNull(MDC.get(keyTransferred));
       assertSame(value, MDC.get(key));
       return null;
-    });
+    }).join();
+    assertSame(valueTransferred, MDC.get(keyTransferred));
+    assertNull(MDC.get(key));
   }
 }

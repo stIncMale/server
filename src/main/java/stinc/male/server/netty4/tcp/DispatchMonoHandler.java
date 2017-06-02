@@ -1,7 +1,6 @@
 package stinc.male.server.netty4.tcp;
 
-import io.netty.util.ReferenceCountUtil;
-import stinc.male.server.util.logging.Mdc;
+import stinc.male.server.util.logging.TransferableMdc;
 import stinc.male.server.reqres.RequestDispatcher;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelConfig;
@@ -16,7 +15,6 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.ReferenceCounted;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -128,10 +126,10 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
     if (evt instanceof IdleStateEvent) {
       IdleStateEvent e = (IdleStateEvent) evt;
       if (e.state() == ALL_IDLE && connectionIdleTimeoutMillis > 0) {
-        final Mdc mdc = Mdc.current();
+        final TransferableMdc mdc = TransferableMdc.current();
         ctx.close()
             .addListener((final ChannelFuture channelFuture) -> {
-              try (@SuppressWarnings("unused") final Mdc mdcTmp = mdc.apply()) {
+              try (@SuppressWarnings("unused") final TransferableMdc mdcTmp = mdc.apply()) {
                 ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE.operationComplete(channelFuture);
               }
             });
@@ -225,9 +223,9 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
   }
 
   private final void respond(final ChannelHandlerContext ctx, @Nullable final RQ request, final CompletionStage<? extends RS> futureResponse) {
-    final Mdc mdc = Mdc.current();
+    final TransferableMdc mdc = TransferableMdc.current();
     futureResponse.whenComplete((response, failure) -> {
-      try (@SuppressWarnings("unused") final Mdc mdcTmp = mdc.apply()) {
+      try (@SuppressWarnings("unused") final TransferableMdc mdcTmp = mdc.apply()) {
         @Nullable
         ChannelFuture futureSend = null;
         try {
@@ -247,9 +245,9 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
               release(request);
             }
           } else {
-            final Mdc mdc2 = Mdc.current();
+            final TransferableMdc mdc2 = TransferableMdc.current();
             futureSend.addListener((ChannelFuture future) -> {
-              try (@SuppressWarnings("unused") final Mdc mdcTmp2 = mdc2.apply()) {
+              try (@SuppressWarnings("unused") final TransferableMdc mdcTmp2 = mdc2.apply()) {
                 try {
                   if (future.isSuccess()) {
                     if (closeChannelAfterResponse(request, response, failure)) {

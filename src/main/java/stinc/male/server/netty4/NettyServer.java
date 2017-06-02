@@ -9,7 +9,7 @@ import java.util.concurrent.CancellationException;
 import stinc.male.server.AbstractServer;
 import stinc.male.server.Server;
 import stinc.male.server.netty4.tcp.DispatchMonoHandler;
-import stinc.male.server.util.logging.Mdc;
+import stinc.male.server.util.logging.TransferableMdc;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -53,12 +53,12 @@ public class NettyServer extends AbstractServer {
     }
     if (futureBind != null) {
       if (futureBind.isSuccess()) {
-        final Mdc mdc = Mdc.current();
+        final TransferableMdc mdc = TransferableMdc.current();
         final Channel channel = futureBind.channel();
         logger.info("{} is listening to {}", this, channel.localAddress());
         channel.closeFuture()
             .addListener(futureClose -> {
-              try (@SuppressWarnings("unused") final Mdc mdcTmp = mdc.apply()) {
+              try (@SuppressWarnings("unused") final TransferableMdc mdcTmp = mdc.apply()) {
                 if (futureClose.isSuccess()) {
                   futureStop.complete(null);
                 } else if (futureClose.isCancelled()) {
@@ -78,12 +78,12 @@ public class NettyServer extends AbstractServer {
 
   protected void doStop(final CompletableFuture<Void> futureStop) {
     checkNotNull(futureStop, "The argument %s must not be null", "futureStop");
-    final Mdc mdc = Mdc.current();
+    final TransferableMdc mdc = TransferableMdc.current();
     CompletableFuture.allOf(
         shutdownEventLoopGroup(sBootstrap.group()),
         shutdownEventLoopGroup(sBootstrap.childGroup()))
         .whenComplete((nothing, cause) -> {
-          try (@SuppressWarnings("unused") final Mdc mdcTmp = mdc.apply()) {
+          try (@SuppressWarnings("unused") final TransferableMdc mdcTmp = mdc.apply()) {
             if (cause == null) {
               futureStop.complete(null);
             } else if (cause instanceof CancellationException) {
@@ -100,10 +100,10 @@ public class NettyServer extends AbstractServer {
     if (eventLoopGroup == null) {
       result.complete(null);
     } else {
-      final Mdc mdc = Mdc.current();
+      final TransferableMdc mdc = TransferableMdc.current();
       eventLoopGroup.shutdownGracefully()
           .addListener(futureShutdown -> {
-            try (@SuppressWarnings("unused") final Mdc mdcTmp = mdc.apply()) {
+            try (@SuppressWarnings("unused") final TransferableMdc mdcTmp = mdc.apply()) {
               if (futureShutdown.isSuccess()) {
                 result.complete(null);
               } else if (futureShutdown.isCancelled()) {

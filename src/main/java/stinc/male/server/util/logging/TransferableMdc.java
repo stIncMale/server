@@ -17,7 +17,7 @@ import java.util.Map;
  * <p>
  * <i>Correct</i>:
  * <pre>{@code
- * final Mdc mdc = Mdc.current();
+ * final TransferableMdc mdc = TransferableMdc.current();
  * executor.submit(() -> {
  *  try (@SuppressWarnings("unused") Mdc mdcTmp = mdc.apply()) {
  *      logger.info("This call can access contents of mdc via org.slf4j.MDC");
@@ -25,49 +25,60 @@ import java.util.Map;
  *  logger.info("This call can not access contents of mdc via org.slf4j.MDC");
  * });
  * }</pre>
- * <i>Incorrect</i>:
+ * <i>Incorrect 1</i>:
  * <pre>{@code
- * final Mdc mdc = Mdc.current();
+ * executor.submit(() -> {
+ *  try (@SuppressWarnings("unused") Mdc mdcTmp = TransferableMdc.current().apply()) {
+ *      logger.info("This call can access contents of mdc via org.slf4j.MDC");
+ *  }
+ *  logger.info("This call can not access contents of mdc via org.slf4j.MDC");
+ * });
+ * }</pre>
+ * This is incorrect because this way we do not have access to the context data of the "parent" thread.
+ * <p>
+ * <i>Incorrect 2</i>:
+ * <pre>{@code
+ * final TransferableMdc mdc = TransferableMdc.current();
  * executor.submit(() -> {//task1
- *  try (Mdc mdcTmp = mdc.apply()) {
+ *  try (TransferableMdc mdcTmp = mdc.apply()) {
  *      //...
  *  }
  * });
  * executor.submit(() -> {//task2
- *  try (Mdc mdcTmp = mdc.apply()) {
+ *  try (TransferableMdc mdcTmp = mdc.apply()) {
  *      //...
  *  }
  * });
  * }</pre>
- * The latter example is incorrect because {@code task1} and {@code task2} may be executed concurrently and hence
+ * This is incorrect because {@code task1} and {@code task2} may be executed concurrently and hence
  * methods {@link #apply()} and {@link #close()} may be executed concurrently, but these methods are not thread-safe.
- * The simplest way to fix the incorrect example is as follows:
+ * The simple way to fix the incorrect example is as follows:
  * <pre>{@code
- * final Mdc mdc1 = Mdc.current();
+ * final TransferableMdc mdc1 = TransferableMdc.current();
  * executor.submit(() -> {//task1
- *  try (Mdc mdcTmp = mdc1.apply()) {
+ *  try (TransferableMdc mdcTmp = mdc1.apply()) {
  *      //...
  *  }
  * });
- * final Mdc mdc2 = Mdc.current();
+ * final TransferableMdc mdc2 = TransferableMdc.current();
  * executor.submit(() -> {//task2
- *  try (Mdc mdcTmp = mdc2.apply()) {
+ *  try (TransferableMdc mdcTmp = mdc2.apply()) {
  *      //...
  *  }
  * });
  * }</pre>
  */
 @NotThreadSafe
-public final class Mdc implements MDCAdapter, Closeable {
+public final class TransferableMdc implements MDCAdapter, Closeable {
   /**
-   * Creates {@link Mdc} which holds current {@linkplain Thread thread}'s
+   * Creates {@link TransferableMdc} which holds current {@linkplain Thread thread}'s
    * {@link MDC} {@linkplain MDC#getCopyOfContextMap() context map}.
    *
-   * @return New {@link Mdc} which state is identical to the current
+   * @return New {@link TransferableMdc} which state is identical to the current
    * {@linkplain Thread thread}'s state of {@link MDC}.
    */
-  public static final Mdc current() {
-    return new Mdc(MDC.getCopyOfContextMap());
+  public static final TransferableMdc current() {
+    return new TransferableMdc(MDC.getCopyOfContextMap());
   }
 
   @Nullable
@@ -75,17 +86,17 @@ public final class Mdc implements MDCAdapter, Closeable {
   @Nullable
   private Map<String, String> backup;
 
-  private Mdc(@Nullable final Map<String, String> contextMap) {
+  private TransferableMdc(@Nullable final Map<String, String> contextMap) {
     context = (contextMap == null || contextMap.isEmpty()) ? null : new HashMap<String, String>(contextMap);
   }
 
   /**
-   * Merges this {@link Mdc} into the current {@link Thread}'s {@link MDC}
+   * Merges this {@link TransferableMdc} into the current {@link Thread}'s {@link MDC}
    * and retains original state of the current {@link MDC}.
    *
    * @return {@code this}.
    */
-  public final Mdc apply() {
+  public final TransferableMdc apply() {
     if (context != null) {
       @Nullable final Map<String, String> currentContext = MDC.getCopyOfContextMap();
       backup = (currentContext == null || currentContext.isEmpty()) ? null : currentContext;

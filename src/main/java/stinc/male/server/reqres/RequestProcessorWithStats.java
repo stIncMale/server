@@ -1,7 +1,6 @@
 package stinc.male.server.reqres;
 
 import com.timgroup.statsd.StatsDClient;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import javax.annotation.concurrent.ThreadSafe;
@@ -10,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nullable;
 import java.util.concurrent.CompletionStage;
 import static com.google.common.base.Preconditions.checkNotNull;
-import stinc.male.server.util.logging.Mdc;
+import stinc.male.server.util.logging.TransferableMdc;
 
 /**
  * Wraps {@link RequestProcessor} and collects statistics via {@link StatsDClient}.
@@ -40,10 +39,10 @@ public final class RequestProcessorWithStats<RQ, RS> implements RequestProcessor
   public final CompletionStage<RS> process(final RQ request) {
     checkNotNull(request, "The argument %s must not be null", "request");
     final long beginInstantMillis = System.currentTimeMillis();
-    final Mdc mdc = Mdc.current();
+    final TransferableMdc mdc = TransferableMdc.current();
     return processor.process(request)
         .handle((response, failure) -> {
-          try (@SuppressWarnings("unused") final Mdc mdcTmp = mdc.apply()) {
+          try (@SuppressWarnings("unused") final TransferableMdc mdcTmp = mdc.apply()) {
             final long endInstantMillis = System.currentTimeMillis();
             collectStats(endInstantMillis - beginInstantMillis);
             if (failure != null) {
