@@ -9,6 +9,7 @@ import static junit.framework.TestCase.assertSame;
 public final class TransferableMdcTest {
 
   public TransferableMdcTest() {
+    ForkJoinPool.commonPool().execute(() -> {});//forces the pool to pre-initialize a thread
   }
 
   @Test

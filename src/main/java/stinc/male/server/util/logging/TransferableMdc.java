@@ -98,7 +98,8 @@ public final class TransferableMdc implements MDCAdapter, Closeable {
    */
   public final TransferableMdc apply() {
     if (context != null) {
-      @Nullable final Map<String, String> currentContext = MDC.getCopyOfContextMap();
+      @Nullable
+      final Map<String, String> currentContext = MDC.getCopyOfContextMap();
       backup = (currentContext == null || currentContext.isEmpty()) ? null : currentContext;
       context.forEach(MDC::put);
     }
