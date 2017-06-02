@@ -40,7 +40,6 @@ public final class TransferableMdcTest {
       }
       assertNull(MDC.get(keyTransferred));
       assertSame(value, MDC.get(key));
-      return null;
     }).get();
     assertSame(valueTransferred, MDC.get(keyTransferred));
     assertNull(MDC.get(key));
