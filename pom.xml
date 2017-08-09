@@ -8,6 +8,18 @@
   <version>0.0.0-SNAPSHOT</version>
   <name>Server</name>
   <packaging>jar</packaging>
+  <url>${server.url}</url>
+  <licenses>
+    <license>
+      <name>${server.licenseName}</name>
+      <url>${server.licenseUrl}</url>
+    </license>
+  </licenses>
+  <inceptionYear>${server.inceptionYear}</inceptionYear>
+  <organization>
+    <name>${server.organizationName}</name>
+    <url>${server.organizationUrl}</url>
+  </organization>
   <properties>
     <spring_version>4.0.6.RELEASE</spring_version>
     <slf4j.version>1.7.12</slf4j.version>
