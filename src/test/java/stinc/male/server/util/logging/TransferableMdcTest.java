@@ -8,7 +8,7 @@ import org.slf4j.MDC;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertSame;
 
-public final class TransferableMdcTest {
+public final class TransferableMdcTest {//a fully functional implementation of SLF4J is required for these tests to succeed
   private static volatile ExecutorService executor;
 
   static {

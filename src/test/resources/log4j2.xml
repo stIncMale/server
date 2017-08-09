@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration name="Logging Config" status="error" strict="true">
+  <Properties>
+    <Property name="server.layoutPattern">
+      [%-5level][%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}][%t][%logger] %msg%n
+    </Property>
+    <Property name="server.charset">UTF-8</Property>
+  </Properties>
+  <Appenders>
+    <Console name="stdout" target="system_out">
+      <Layout type="PatternLayout" charset="${server.charset}">
+        <Pattern>${server.layoutPattern}</Pattern>
+      </Layout>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="error">
+      <AppenderRef ref="stdout"/>
+    </Root>
+    <Logger name="stinc.male.server" additivity="false" level="all">
+      <AppenderRef ref="stdout"/>
+    </Logger>
+  </Loggers>
+</Configuration>

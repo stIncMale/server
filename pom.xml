@@ -21,8 +21,8 @@
     <url>${server.organizationUrl}</url>
   </organization>
   <properties>
-    <spring_version>4.0.6.RELEASE</spring_version>
-    <slf4j.version>1.7.12</slf4j.version>
+    <log4j.version>2.8.2</log4j.version>
+    <spring.version>4.0.6.RELEASE</spring.version>
     <netty4.version>4.0.29.Final</netty4.version>
     <server.charset>UTF-8</server.charset>
     <project.build.sourceEncoding>${server.charset}</project.build.sourceEncoding>
@@ -69,7 +69,17 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>${slf4j.version}</version>
+        <version>1.7.25</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-slf4j-impl</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>${log4j.version}</version>
       </dependency>
       <dependency>
         <groupId>com.google.code.findbugs</groupId>
@@ -89,7 +99,7 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
-        <version>${spring_version}</version>
+        <version>${spring.version}</version>
       </dependency>
       <dependency>
         <groupId>com.indeed</groupId>
@@ -105,13 +115,8 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-test</artifactId>
-        <version>${spring_version}</version>
+        <version>${spring.version}</version>
         <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-slf4j-impl</artifactId>
-        <version>2.8.2</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -165,6 +170,11 @@
       <artifactId>log4j-slf4j-impl</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <pluginManagement>
@@ -183,7 +193,7 @@
             <showDeprecation>true</showDeprecation>
             <compilerArgs>
               <arg>-Werror</arg>
-              <arg>-Xlint:all,-try</arg>
+              <arg>-Xlint:all,-try,-processing</arg>
             </compilerArgs>
           </configuration>
         </plugin>
@@ -303,7 +313,7 @@
       <id>default</id>
       <properties>
         <maven.test.skip>false</maven.test.skip>
-        <server.maven-surefire-plugin.parallel>all</server.maven-surefire-plugin.parallel>
+        <server.maven-surefire-plugin.parallel>suitesAndClasses</server.maven-surefire-plugin.parallel>
       </properties>
       <activation>
         <activeByDefault/>
