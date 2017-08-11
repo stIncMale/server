@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration name="Logging Config" status="error" strict="true">
+<Configuration name="Logging Config" status="warn" strict="true">
   <Properties>
     <Property name="server.layoutPattern">
       [%-5level][%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}][%t][%logger] %msg%n
@@ -8,7 +8,7 @@
   </Properties>
   <Appenders>
     <Console name="stdout" target="system_out">
-      <Layout type="PatternLayout" charset="${server.charset}">
+      <Layout type="PatternLayout" charset="UTF-8">
         <Pattern>${server.layoutPattern}</Pattern>
       </Layout>
     </Console>
