@@ -2,6 +2,7 @@ package stinc.male.server.netty4;
 
 import io.netty.util.ReferenceCountUtil;
 import io.netty.util.ReferenceCounted;
+import javax.annotation.Nullable;
 import stinc.male.server.netty4.tcp.DispatchMonoHandler;
 import javax.annotation.concurrent.NotThreadSafe;
 import static com.google.common.base.Preconditions.checkArgument;
@@ -58,6 +59,18 @@ public final class RequestWithMetadata<RQ> implements ReferenceCounted {
   public final RequestWithMetadata<RQ> retain(final int increment) {
     checkArgument(increment > 0, "The argument %s must be positive", "increment");
     ReferenceCountUtil.retain(request, increment);
+    return this;
+  }
+
+  @Override
+  public final ReferenceCounted touch() {
+    ReferenceCountUtil.touch(request);
+    return this;
+  }
+
+  @Override
+  public final ReferenceCounted touch(@Nullable final Object hint) {
+    ReferenceCountUtil.touch(request, hint);
     return this;
   }
 

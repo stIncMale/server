@@ -1,17 +1,17 @@
 package stinc.male.server.netty4.tcp.http;
 
+import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import stinc.male.server.reqres.RequestDispatcher;
-import stinc.male.server.netty4.RequestWithMetadata;
-import io.netty.channel.embedded.EmbeddedChannel;
-import org.junit.Test;
+import io.netty.handler.codec.http.HttpUtil;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import org.junit.Test;
+import stinc.male.server.netty4.RequestWithMetadata;
+import stinc.male.server.reqres.RequestDispatcher;
 import static io.netty.handler.codec.http.HttpMethod.GET;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_0;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
@@ -37,11 +37,11 @@ public final class TestHttpDispatchMonoHandler {
   public final void keepAlive1() {
     final EmbeddedChannel testChannel = new EmbeddedChannel(new HttpDispatchMonoHandler(new Dispatcher(), -1));
     final FullHttpRequest httpRequest = new DefaultFullHttpRequest(HTTP_1_0, GET, "/");
-    HttpHeaders.setKeepAlive(httpRequest, true);
+    HttpUtil.setKeepAlive(httpRequest, true);
     testChannel.writeInbound(new RequestWithMetadata<>(httpRequest));
-    final FullHttpResponse response = (FullHttpResponse) testChannel.readOutbound();
+    final FullHttpResponse response = testChannel.readOutbound();
     assertNotNull(response);
-    assertTrue(HttpHeaders.isKeepAlive(response));
+    assertTrue(HttpUtil.isKeepAlive(response));
   }
 
   @Test
@@ -49,9 +49,9 @@ public final class TestHttpDispatchMonoHandler {
     final EmbeddedChannel testChannel = new EmbeddedChannel(new HttpDispatchMonoHandler(new Dispatcher(), -1));
     final FullHttpRequest httpRequest = new DefaultFullHttpRequest(HTTP_1_1, GET, "/");
     testChannel.writeInbound(new RequestWithMetadata<>(httpRequest));
-    final FullHttpResponse response = (FullHttpResponse) testChannel.readOutbound();
+    final FullHttpResponse response = testChannel.readOutbound();
     assertNotNull(response);
-    assertTrue(HttpHeaders.isKeepAlive(response));
+    assertTrue(HttpUtil.isKeepAlive(response));
   }
 
   @Test
@@ -59,19 +59,19 @@ public final class TestHttpDispatchMonoHandler {
     final EmbeddedChannel testChannel = new EmbeddedChannel(new HttpDispatchMonoHandler(new Dispatcher(), -1));
     final FullHttpRequest httpRequest = new DefaultFullHttpRequest(HTTP_1_0, GET, "/");
     testChannel.writeInbound(new RequestWithMetadata<>(httpRequest));
-    final FullHttpResponse response = (FullHttpResponse) testChannel.readOutbound();
+    final FullHttpResponse response = testChannel.readOutbound();
     assertNotNull(response);
-    assertFalse(HttpHeaders.isKeepAlive(response));
+    assertFalse(HttpUtil.isKeepAlive(response));
   }
 
   @Test
   public final void noKeepAlive2() {
     final EmbeddedChannel testChannel = new EmbeddedChannel(new HttpDispatchMonoHandler(new Dispatcher(), -1));
     final FullHttpRequest httpRequest = new DefaultFullHttpRequest(HTTP_1_1, GET, "/");
-    HttpHeaders.setKeepAlive(httpRequest, false);
+    HttpUtil.setKeepAlive(httpRequest, false);
     testChannel.writeInbound(new RequestWithMetadata<>(httpRequest));
-    final FullHttpResponse response = (FullHttpResponse) testChannel.readOutbound();
+    final FullHttpResponse response = testChannel.readOutbound();
     assertNotNull(response);
-    assertFalse(HttpHeaders.isKeepAlive(response));
+    assertFalse(HttpUtil.isKeepAlive(response));
   }
 }

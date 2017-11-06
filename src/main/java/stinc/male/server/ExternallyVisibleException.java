@@ -1,4 +1,4 @@
-package stinc.male.server.util.throwable;
+package stinc.male.server;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -79,6 +79,7 @@ public class ExternallyVisibleException extends RuntimeException {
    * A special serialization method.
    *
    * @param out {@link ObjectOutputStream}.
+   *
    * @throws IOException If I/O error occur.
    */
   private final void writeObject(final ObjectOutputStream out) throws IOException {
@@ -89,6 +90,7 @@ public class ExternallyVisibleException extends RuntimeException {
    * A special deserialization method.
    *
    * @param in {@link ObjectInputStream}.
+   *
    * @throws InvalidObjectException If {@link #externalMessage} is {@code null}.
    * @throws ClassNotFoundException If the class of a {@link java.io.Serializable} object could not be found.
    */

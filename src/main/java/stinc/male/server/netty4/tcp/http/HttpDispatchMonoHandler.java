@@ -1,23 +1,22 @@
 package stinc.male.server.netty4.tcp.http;
 
-import stinc.male.server.netty4.tcp.DispatchMonoHandler;
-import stinc.male.server.netty4.tcp.http.util.HttpUtil;
-import stinc.male.server.util.logging.TransferableMdc;
-import stinc.male.server.reqres.RequestDispatcher;
-import stinc.male.server.netty4.RequestWithMetadata;
-import stinc.male.server.util.throwable.ExternallyVisibleException;
-import stinc.male.server.util.throwable.ThrowableUtil;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpMessage;
 import java.util.concurrent.CompletionStage;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import stinc.male.server.netty4.RequestWithMetadata;
+import stinc.male.server.netty4.tcp.DispatchMonoHandler;
+import stinc.male.server.netty4.tcp.http.util.HttpUtil;
+import stinc.male.server.reqres.RequestDispatcher;
+import stinc.male.server.util.logging.TransferableMdc;
+import stinc.male.server.ExternallyVisibleException;
+import stinc.male.server.util.throwable.ThrowableUtil;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
@@ -88,7 +87,7 @@ public class HttpDispatchMonoHandler extends DispatchMonoHandler<RequestWithMeta
                 throw new RuntimeException(failure);
               }
               final HttpMessage httpRequest = request.request();
-              HttpHeaders.setKeepAlive(httpResponse, HttpHeaders.isKeepAlive(httpRequest));
+              io.netty.handler.codec.http.HttpUtil.setKeepAlive(httpResponse, io.netty.handler.codec.http.HttpUtil.isKeepAlive(httpRequest));
               return httpResponse;
             }
           });

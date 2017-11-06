@@ -4,12 +4,13 @@ import com.google.common.base.Charsets;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
-import org.apache.commons.lang3.StringUtils;
-import javax.annotation.Nullable;
 import java.util.Optional;
+import javax.annotation.Nullable;
+import org.apache.commons.lang3.StringUtils;
 import stinc.male.server.netty4.util.channel.ChannelUtil;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -24,7 +25,7 @@ public final class HttpUtil {
     final FullHttpResponse result = new DefaultFullHttpResponse(version, status);
     final HttpHeaders responseHeaders = result.headers();
     responseHeaders.clear();
-    responseHeaders.add(HttpHeaders.Names.CONTENT_LENGTH, 0);
+    responseHeaders.add(HttpHeaderNames.CONTENT_LENGTH, 0);
     return result;
   }
 
@@ -37,13 +38,13 @@ public final class HttpUtil {
       httpResponse.content()
           .clear()
           .writeBytes(byteHttpResponseContent);
-      responseHeaders.set(HttpHeaders.Names.CONTENT_LENGTH, byteHttpResponseContent.length);
+      responseHeaders.set(HttpHeaderNames.CONTENT_LENGTH, byteHttpResponseContent.length);
     } else {
       httpResponse.content()
           .clear();
-      responseHeaders.set(HttpHeaders.Names.CONTENT_LENGTH, 0);
+      responseHeaders.set(HttpHeaderNames.CONTENT_LENGTH, 0);
     }
-    responseHeaders.add(HttpHeaders.Names.CONTENT_TYPE, "text/plain; charset=utf-8");
+    responseHeaders.add(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=utf-8");
     return httpResponse;
   }
 

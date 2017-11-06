@@ -1,13 +1,6 @@
 package stinc.male.server.example;
 
 import com.google.common.collect.ImmutableSet;
-import stinc.male.server.Server;
-import stinc.male.server.netty4.MetadataMap;
-import stinc.male.server.netty4.NettyServer;
-import stinc.male.server.netty4.RequestMetadataDecoder;
-import stinc.male.server.netty4.tcp.http.ClientAddressMdcHandler;
-import stinc.male.server.netty4.tcp.http.HttpDispatchMonoHandler;
-import stinc.male.server.reqres.spring.http.SimpleSpringHttpRequestDispatcherByUrl;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,6 +11,8 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.util.ResourceLeakDetector;
+import java.net.InetSocketAddress;
+import javax.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -25,16 +20,18 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import javax.annotation.Nullable;
-import javax.annotation.PreDestroy;
-import java.net.InetSocketAddress;
-import static com.google.common.base.Preconditions.checkState;
+import stinc.male.server.Server;
+import stinc.male.server.netty4.MetadataMap;
+import stinc.male.server.netty4.NettyServer;
+import stinc.male.server.netty4.RequestMetadataDecoder;
+import stinc.male.server.netty4.tcp.http.ClientAddressMdcHandler;
+import stinc.male.server.netty4.tcp.http.HttpDispatchMonoHandler;
+import stinc.male.server.reqres.spring.http.SimpleSpringHttpRequestDispatcherByUrl;
 import static io.netty.util.ResourceLeakDetector.Level.PARANOID;
 
 @Configuration
 @ComponentScan(basePackages = {"stinc.male.server.example"})
-@PropertySource("classpath:stinc/male/server/example/exampleSpringHttpServer.properties")
-class TestExampleSpringHttpServer_SpringConfig {
+@PropertySource("classpath:stinc/male/server/example/exampleSpringHttpServer.properties") class TestExampleSpringHttpServer_SpringConfig {
   @Bean
   static PropertySourcesPlaceholderConfigurer providePropertySourcesPlaceholderConfigurer() {
     return new PropertySourcesPlaceholderConfigurer();
@@ -99,11 +96,5 @@ class TestExampleSpringHttpServer_SpringConfig {
         });
     server = new NettyServer(httpServerBootstrap);
     return server;
-  }
-
-  @PreDestroy
-  private final void shutdown() throws InterruptedException {
-    checkState(server != null, "server is null");
-    server.stop();
   }
 }

@@ -54,7 +54,7 @@ public class SimpleHttpRequestDispatcherByUrl
   protected String getProcessorName(final RequestWithMetadata<? extends FullHttpRequest> request) {
     checkNotNull(request, "The argument %s must not be null", "request");
     final FullHttpRequest httpRequest = request.request();
-    final String strUri = httpRequest.getUri();
+    final String strUri = httpRequest.uri();
     final QueryStringDecoder queryStringDecoder = new QueryStringDecoder(strUri, Charsets.UTF_8);
     final String path = queryStringDecoder.path();
     final String result;
