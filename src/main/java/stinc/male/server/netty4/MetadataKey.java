@@ -34,7 +34,7 @@ public final class MetadataKey<T> {
     if (this == o) {
       result = true;
     } else if (o instanceof MetadataKey) {
-      final MetadataKey<?> that = (MetadataKey<?>) o;
+      final MetadataKey<?> that = (MetadataKey<?>)o;
       result = id.equals(that.id);
     } else {
       result = false;

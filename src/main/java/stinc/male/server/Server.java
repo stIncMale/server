@@ -15,6 +15,7 @@ public interface Server {
    *
    * @return {@link CompletionStage} that may be used to get notified when the server stops operating,
    * or if the server fails to start.
+   *
    * @see #start()
    * @see #stop()
    */

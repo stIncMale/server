@@ -11,11 +11,11 @@ import java.util.concurrent.CompletionStage;
 @Component
 @ThreadSafe
 final class TestSpringRequestDispatcher_RequestProcessor implements RequestProcessor<Object, Object> {
-    private TestSpringRequestDispatcher_RequestProcessor() {
-    }
+  private TestSpringRequestDispatcher_RequestProcessor() {
+  }
 
-    @Override
-    public final CompletionStage<Object> process(final Object request) {
-        return CompletableFuture.completedFuture(request);
-    }
+  @Override
+  public final CompletionStage<Object> process(final Object request) {
+    return CompletableFuture.completedFuture(request);
+  }
 }

@@ -42,7 +42,7 @@ public final class RequestProcessorWithStats<RQ, RS> implements RequestProcessor
     final TransferableMdc mdc = TransferableMdc.current();
     return processor.process(request)
         .handle((response, failure) -> {
-          try (final TransferableMdc mdcTmp = mdc.apply()) {
+          try (final TransferableMdc ignored = mdc.apply()) {
             final long endInstantMillis = System.currentTimeMillis();
             collectStats(endInstantMillis - beginInstantMillis);
             if (failure != null) {
@@ -56,13 +56,15 @@ public final class RequestProcessorWithStats<RQ, RS> implements RequestProcessor
   private final void collectStats(final long processingTimeMillis) {
     @Nullable final String timeAspect;
     if (logger.isDebugEnabled() || statsDClient != null) {
-      timeAspect = processor.getClass().getSimpleName() + ".processingTimeMillis";
+      timeAspect = processor.getClass()
+          .getSimpleName() + ".processingTimeMillis";
     } else {
       timeAspect = null;
     }
     logger.debug("{}={}", timeAspect, processingTimeMillis);
     if (statsDClient != null) {
-      String countAspect = processor.getClass().getSimpleName() + ".requestsCount";
+      String countAspect = processor.getClass()
+          .getSimpleName() + ".requestsCount";
       statsDClient.incrementCounter(countAspect, statsTags);
       statsDClient.recordExecutionTime(timeAspect, processingTimeMillis, statsTags);
     }

@@ -23,7 +23,7 @@ public final class ClientAddressMdcHandler extends ChannelInboundHandlerAdapter 
       final String unknownClientAddress = "<unknown client address>";
       MDC.remove(keyClientAddress);
       if (msg instanceof HttpRequest) {
-        MDC.put(keyClientAddress, HttpUtil.getRemoteAddress(((HttpRequest) msg).headers(), ctx.channel())
+        MDC.put(keyClientAddress, HttpUtil.getRemoteAddress(((HttpRequest)msg).headers(), ctx.channel())
             .orElse(unknownClientAddress));
       } else {
         MDC.put(keyClientAddress, ChannelUtil.getRemoteAddress(ctx.channel())

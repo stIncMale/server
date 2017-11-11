@@ -35,7 +35,8 @@ public final class TestMonoHandler {
   @Test
   public final void autoRead() {
     final EmbeddedChannel testChannel = new EmbeddedChannel(new MonoHandler());
-    assertFalse(testChannel.config().isAutoRead());
+    assertFalse(testChannel.config()
+        .isAutoRead());
   }
 
   @Test
@@ -48,7 +49,7 @@ public final class TestMonoHandler {
   }
 
   @Test
-  public final void multyRead() {
+  public final void multiRead() {
     final EmbeddedChannel testChannel = new EmbeddedChannel(new MonoHandler());
     final Object msg = new Object();
     assertTrue(testChannel.writeInbound(msg, new Object()));
@@ -58,7 +59,7 @@ public final class TestMonoHandler {
   }
 
   @Test
-  public final void multyReadWrite() {
+  public final void multiReadWrite() {
     final EmbeddedChannel testChannel = new EmbeddedChannel(new MonoHandler(), new BusinessLogicHandler());
     final Object msg1 = new Object();
     final Object msg2 = new Object();
@@ -97,13 +98,14 @@ public final class TestMonoHandler {
 
   @Test
   public final void tmp() {
-    final EmbeddedChannel testChannel = new EmbeddedChannel(new ChannelInitializer<Channel>() {
+    final EmbeddedChannel testChannel = new EmbeddedChannel(new ChannelInitializer<>() {
       @Override
       protected void initChannel(Channel ch) throws Exception {
         ChannelPipeline p = ch.pipeline();
         p.addLast(new MonoHandler());
       }
     });
-    assertFalse(testChannel.config().isAutoRead());
+    assertFalse(testChannel.config()
+        .isAutoRead());
   }
 }

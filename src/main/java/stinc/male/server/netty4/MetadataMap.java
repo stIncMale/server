@@ -38,7 +38,7 @@ public final class MetadataMap implements Metadata {
     checkNotNull(key, "The argument %s must not be null", "key");
     return metadata == null
         ? Optional.empty()
-        : Optional.ofNullable((T) metadata.get(key));
+        : Optional.ofNullable((T)metadata.get(key));
   }
 
   @Override

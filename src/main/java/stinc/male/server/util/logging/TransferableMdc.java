@@ -86,7 +86,7 @@ public final class TransferableMdc implements MDCAdapter, Closeable {
   private Map<String, String> backup;
 
   private TransferableMdc(@Nullable final Map<String, String> contextMap) {
-    context = (contextMap == null || contextMap.isEmpty()) ? null : new HashMap<String, String>(contextMap);
+    context = (contextMap == null || contextMap.isEmpty()) ? null : new HashMap<>(contextMap);
   }
 
   /**
@@ -97,8 +97,7 @@ public final class TransferableMdc implements MDCAdapter, Closeable {
    */
   public final TransferableMdc apply() {
     if (context != null) {
-      @Nullable
-      final Map<String, String> currentContext = MDC.getCopyOfContextMap();
+      @Nullable final Map<String, String> currentContext = MDC.getCopyOfContextMap();
       backup = (currentContext == null || currentContext.isEmpty()) ? null : currentContext;
       context.forEach(MDC::put);
     }
@@ -156,7 +155,7 @@ public final class TransferableMdc implements MDCAdapter, Closeable {
   @Override
   @Nullable
   public final Map<String, String> getCopyOfContextMap() {
-    return (context == null) ? null : new HashMap<String, String>(context);
+    return (context == null) ? null : new HashMap<>(context);
   }
 
   /**

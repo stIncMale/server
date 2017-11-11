@@ -12,7 +12,6 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.util.ResourceLeakDetector;
 import java.net.InetSocketAddress;
-import javax.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -31,14 +30,12 @@ import static io.netty.util.ResourceLeakDetector.Level.PARANOID;
 
 @Configuration
 @ComponentScan(basePackages = {"stinc.male.server.example"})
-@PropertySource("classpath:stinc/male/server/example/exampleSpringHttpServer.properties") class TestExampleSpringHttpServer_SpringConfig {
+@PropertySource("classpath:stinc/male/server/example/exampleSpringHttpServer.properties")
+class TestExampleSpringHttpServer_SpringConfig {
   @Bean
   static PropertySourcesPlaceholderConfigurer providePropertySourcesPlaceholderConfigurer() {
     return new PropertySourcesPlaceholderConfigurer();
   }
-
-  @Nullable
-  private Server server;
 
   TestExampleSpringHttpServer_SpringConfig() {
     ResourceLeakDetector.setLevel(PARANOID);
@@ -51,7 +48,7 @@ import static io.netty.util.ResourceLeakDetector.Level.PARANOID;
 
   @Bean
   RequestMetadataDecoder<FullHttpRequest> provideRequestMetadataDecoder() {
-    return new RequestMetadataDecoder<FullHttpRequest>() {
+    return new RequestMetadataDecoder<>() {
       @Override
       protected MetadataMap createMetadata(final ChannelHandlerContext ctx, final FullHttpRequest request) {
         //add any data to requestWithMetadata, e.g. remote address from ctx
@@ -71,7 +68,7 @@ import static io.netty.util.ResourceLeakDetector.Level.PARANOID;
         connectionIdleTimeoutMillis);
   }
 
-  @Bean(initMethod = "start")
+  @Bean(initMethod = "start", destroyMethod = "stop")
   Server provideHttpServer(
       final RequestMetadataDecoder<FullHttpRequest> requestMetadataDecoder,
       final ClientAddressMdcHandler clientAddressMdcHandler,
@@ -83,7 +80,7 @@ import static io.netty.util.ResourceLeakDetector.Level.PARANOID;
         .group(new NioEventLoopGroup(bossThreads), new NioEventLoopGroup(workerThreads))
         .channel(NioServerSocketChannel.class)
         .localAddress(new InetSocketAddress("localhost", port))
-        .childHandler(new ChannelInitializer<Channel>() {
+        .childHandler(new ChannelInitializer<>() {
           @Override
           protected final void initChannel(final Channel channel) throws Exception {
             channel.pipeline()
@@ -94,7 +91,6 @@ import static io.netty.util.ResourceLeakDetector.Level.PARANOID;
                 .addLast(httpDispatchHandler);
           }
         });
-    server = new NettyServer(httpServerBootstrap);
-    return server;
+    return new NettyServer(httpServerBootstrap);
   }
 }

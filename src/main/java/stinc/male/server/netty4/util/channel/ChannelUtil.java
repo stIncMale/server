@@ -16,7 +16,7 @@ public final class ChannelUtil {
     @Nullable final String result;
     @Nullable final SocketAddress socketAddress = channel.remoteAddress();
     if (socketAddress instanceof InetSocketAddress) {
-      result = ((InetSocketAddress) socketAddress).getAddress()
+      result = ((InetSocketAddress)socketAddress).getAddress()
           .getHostAddress();
     } else {
       result = null;

@@ -26,14 +26,14 @@ public final class TestNettyServer {
     sBootstrap.channel(NioServerSocketChannel.class);
     sBootstrap.group(new NioEventLoopGroup(1));
     sBootstrap.localAddress(new InetSocketAddress("localhost", 22875));
-    sBootstrap.handler(new ChannelInitializer<Channel>() {
+    sBootstrap.handler(new ChannelInitializer<>() {
       @Override
       protected final void initChannel(final Channel channel) throws Exception {
         final ChannelPipeline pipeline = channel.pipeline();
         pipeline.addFirst(new LoggingHandler(LogLevel.DEBUG));
       }
     });
-    sBootstrap.childHandler(new ChannelInitializer<Channel>() {
+    sBootstrap.childHandler(new ChannelInitializer<>() {
       @Override
       protected final void initChannel(final Channel channel) throws Exception {
         final ChannelPipeline pipeline = channel.pipeline();

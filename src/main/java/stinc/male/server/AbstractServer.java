@@ -41,7 +41,8 @@ public abstract class AbstractServer implements Server {
         result = new CompletableFuture<>();
         futureStop = result;
         result.thenRun(() -> logger.info("{} stopped", this));
-        if (Thread.currentThread().isInterrupted()) {
+        if (Thread.currentThread()
+            .isInterrupted()) {
           result.completeExceptionally(new InterruptedException());
         } else {
           try {
@@ -63,9 +64,7 @@ public abstract class AbstractServer implements Server {
   @Override
   public void stop() throws InterruptedException {
     synchronized (mutexStartShutdown) {
-      if (futureStop == null) {
-        //nothing to do
-      } else {
+      if (futureStop != null) {
         if (!futureStop.isDone()) {
           try {
             doStop(futureStop);
@@ -74,8 +73,6 @@ public abstract class AbstractServer implements Server {
           }
           try {
             futureStop.get();
-          } catch (final InterruptedException e) {
-            throw e;
           } catch (final ExecutionException e) {
             throw new RuntimeException(e);
           }

@@ -73,9 +73,7 @@ public abstract class SpringRequestDispatcher<RQ, RS> extends RequestDispatcherB
     checkNotNull(appCtx, "The argument %s must not be null", "appCtx");
     final Map<String, RequestProcessor<RQ, RS>> result = new HashMap<>();
     appCtx.getBeansWithAnnotation(Processor.class)
-        .entrySet()
-        .forEach(beanEntry -> {
-          final Object bean = beanEntry.getValue();
+        .forEach((beanName, bean) -> {
           if (bean instanceof RequestProcessor) {
             if (bean instanceof RequestDispatcher) {
               throw new RuntimeException(String.format(
@@ -87,7 +85,7 @@ public abstract class SpringRequestDispatcher<RQ, RS> extends RequestDispatcherB
               final Processor processorAnnotation = processorClass.getAnnotation(Processor.class);
               final String processorName = processorAnnotation.value();
               final RequestProcessorWithStats<RQ, RS> processor
-                  = addStats((RequestProcessor<RQ, RS>) bean, statsDClient, Collections.singleton(String.format("type:%s", processorName)));
+                  = addStats((RequestProcessor<RQ, RS>)bean, statsDClient, Collections.singleton(String.format("type:%s", processorName)));
               result.put(processorName, processor);
             }
           } else {
@@ -106,7 +104,7 @@ public abstract class SpringRequestDispatcher<RQ, RS> extends RequestDispatcherB
       @Nullable final StatsDClient statsDClient,
       final Collection<String> statsTags) {
     return (processor instanceof RequestProcessorWithStats)
-        ? (RequestProcessorWithStats<RQ, RS>) processor
+        ? (RequestProcessorWithStats<RQ, RS>)processor
         : new RequestProcessorWithStats<>(processor, statsDClient, statsTags);
   }
 }

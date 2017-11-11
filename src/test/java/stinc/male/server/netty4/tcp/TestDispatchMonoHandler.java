@@ -27,7 +27,7 @@ public final class TestDispatchMonoHandler {
 
     @Override
     @Nullable
-    protected final Object failureResponse(final Object request, final Throwable failure) {
+    protected final Object failureResponse(@Nullable final Object request, final Throwable failure) {
       return FAILURE_RESPONSE;
     }
 
@@ -49,7 +49,7 @@ public final class TestDispatchMonoHandler {
     public final CompletionStage<Object> process(final Object request) {
       final CompletionStage<Object> result;
       if (request instanceof CompletionStage) {
-        result = (CompletionStage<Object>) request;
+        result = (CompletionStage<Object>)request;
       } else if (request == FAILURE_REQUEST) {
         throw new RuntimeException();
       } else {
@@ -65,9 +65,12 @@ public final class TestDispatchMonoHandler {
   @Test
   public final void channelRegistered() {
     final EmbeddedChannel testChannel = new EmbeddedChannel(new DispatchMonoHandler<>(new Dispatcher(), 1));
-    assertTrue(testChannel.pipeline().first() instanceof IdleStateHandler);
-    assertNotNull(testChannel.pipeline().get(MonoHandler.class));
-    assertFalse(testChannel.config().isAutoRead());
+    assertTrue(testChannel.pipeline()
+        .first() instanceof IdleStateHandler);
+    assertNotNull(testChannel.pipeline()
+        .get(MonoHandler.class));
+    assertFalse(testChannel.config()
+        .isAutoRead());
   }
 
   @Test
@@ -100,7 +103,8 @@ public final class TestDispatchMonoHandler {
     final EmbeddedChannel testChannel = new EmbeddedChannel(new DispatchMonoHandler<>(new Dispatcher(), -1));
     testChannel.writeInbound(new Object());
     assertTrue(testChannel.isActive());
-    assertNull(testChannel.pipeline().get(IdleStateHandler.class));
+    assertNull(testChannel.pipeline()
+        .get(IdleStateHandler.class));
   }
 
   @Test

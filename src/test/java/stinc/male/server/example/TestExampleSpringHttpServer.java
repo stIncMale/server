@@ -1,7 +1,5 @@
 package stinc.male.server.example;
 
-import static org.junit.Assert.assertEquals;
-import stinc.male.server.Server;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -15,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import stinc.male.server.Server;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestExampleSpringHttpServer_SpringConfig.class})
@@ -38,19 +38,21 @@ public final class TestExampleSpringHttpServer {
 
   @Test
   public final void testRoot() throws Exception {
-    assertEquals(TestExampleSpringHttpServer_RootProcessor.RESPONSE,
+    assertEquals(
+        TestExampleSpringHttpServer_RootProcessor.RESPONSE,
         request(String.format("http://localhost:%s/", port)));
   }
 
   @Test
   public final void testHelloWorld() throws Exception {
-    assertEquals(TestExampleSpringHttpServer_HelloWorldProcessor.RESPONSE,
+    assertEquals(
+        TestExampleSpringHttpServer_HelloWorldProcessor.RESPONSE,
         request(String.format("http://localhost:%s/context/path/helloWorld", port)));
   }
 
   @Test
   public final void testChunkedRequest() throws Exception {
-    final HttpURLConnection connection = (HttpURLConnection) new URL(String.format("http://localhost:%s/", port))
+    final HttpURLConnection connection = (HttpURLConnection)new URL(String.format("http://localhost:%s/", port))
         .openConnection();
     connection.setConnectTimeout(3000);
     connection.setReadTimeout(3000);

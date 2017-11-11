@@ -45,7 +45,7 @@ public final class RequestWithMetadata<RQ> implements ReferenceCounted {
   @Override
   public final int refCnt() {
     return request instanceof ReferenceCounted
-        ? ((ReferenceCounted) request).refCnt()
+        ? ((ReferenceCounted)request).refCnt()
         : 1;
   }
 

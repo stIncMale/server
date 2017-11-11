@@ -20,7 +20,7 @@ import javax.annotation.concurrent.NotThreadSafe;
  * and allowing a client to send a next request before receiving an answer to the previous request.
  * <p>
  * Disables {@linkplain ChannelConfig#setAutoRead(boolean) auto read} and controls read operations by itself
- * (auto read is desabled in {@link #channelRegistered(ChannelHandlerContext)} and is enabled back again in
+ * (auto read is disabled in {@link #channelRegistered(ChannelHandlerContext)} and is enabled back again in
  * {@link #handlerRemoved(ChannelHandlerContext)} if it was enabled before disabling).
  * This handler must be placed in the {@link ChannelPipeline} above (after in the inbound/upstream evaluation order) any decoders,
  * and above (before in the outbound/downstream evaluation order) any encoders:
@@ -33,7 +33,7 @@ import javax.annotation.concurrent.NotThreadSafe;
  *  ...
  *  p.addLast(new MonoHandler());
  *  ...
- *  p.addLast(new MyBysinessLogicHandler());
+ *  p.addLast(new MyBusinessLogicHandler());
  *  ...
  *  p.addLast(new MyExceptionHandler());
  *  ...
@@ -92,14 +92,12 @@ public final class MonoHandler extends ChannelDuplexHandler {
 
   @Override
   public final void channelReadComplete(final ChannelHandlerContext ctx) throws Exception {
-    {//a workaround for the problem described at https://github.com/netty/netty/commit/3e70b4ed99cbd29798a869bb3d7b3415ca8416e0
-      /**
-       * The problem is that ChannelHandlerContext.read may not produce any message,
-       * hence ChannelInboundHandlerAdapter.channelRead may not be called after ChannelHandlerContext.read.
-       * In order to work around this problem we have to call ChannelHandlerContext.read again and again
-       * until it produces a message and causes ChannelInboundHandlerAdapter.channelRead to be called,
-       * which sets upstreamOpen to false.
-       */
+    {//TODO a workaround for the problem described at https://github.com/netty/netty/commit/3e70b4ed99cbd29798a869bb3d7b3415ca8416e0
+      /*The problem is that ChannelHandlerContext.read may not produce any message,
+      hence ChannelInboundHandlerAdapter.channelRead may not be called after ChannelHandlerContext.read.
+      In order to work around this problem we have to call ChannelHandlerContext.read again and again
+      until it produces a message and causes ChannelInboundHandlerAdapter.channelRead to be called,
+      which sets upstreamOpen to false.*/
       if (upstreamOpen) {
         ctx.read();
       }
@@ -141,9 +139,15 @@ public final class MonoHandler extends ChannelDuplexHandler {
   }
 
   private final void disableAutoRead(final Channel channel) {
-    checkState(channel.attr(INITIAL_AUTO_READ_ATTR_KEY).get() == null,
-        "{} was already added to {}", getClass().getSimpleName(), channel.pipeline());
-    channel.attr(INITIAL_AUTO_READ_ATTR_KEY).set(channel.config().isAutoRead());
+    checkState(
+        channel.attr(INITIAL_AUTO_READ_ATTR_KEY)
+            .get() == null,
+        "{} was already added to {}",
+        getClass().getSimpleName(),
+        channel.pipeline());
+    channel.attr(INITIAL_AUTO_READ_ATTR_KEY)
+        .set(channel.config()
+            .isAutoRead());
     channel.config()
         .setAutoRead(false);
   }
@@ -152,7 +156,8 @@ public final class MonoHandler extends ChannelDuplexHandler {
     @Nullable
     Channel channel = ctx.channel();
     if (channel != null) {
-      @Nullable final Boolean initialAutoRead = channel.attr(INITIAL_AUTO_READ_ATTR_KEY).get();
+      @Nullable final Boolean initialAutoRead = channel.attr(INITIAL_AUTO_READ_ATTR_KEY)
+          .get();
       checkState(initialAutoRead != null,
           "Internal error, there is no %s attribute in the %s", INITIAL_AUTO_READ_ATTR_KEY, channel);
       channel.config()

@@ -106,8 +106,7 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
    */
   @Override
   public void channelRead(final ChannelHandlerContext ctx, final Object msg) throws Exception {
-    @SuppressWarnings("unchecked")
-    final RQ request = (RQ) msg;
+    @SuppressWarnings("unchecked") final RQ request = (RQ)msg;
     CompletionStage<? extends RS> futureResponse;
     try {
       futureResponse = dispatcher.process(request);
@@ -124,12 +123,12 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
   @Override
   public void userEventTriggered(final ChannelHandlerContext ctx, final Object evt) throws Exception {
     if (evt instanceof IdleStateEvent) {
-      IdleStateEvent e = (IdleStateEvent) evt;
+      IdleStateEvent e = (IdleStateEvent)evt;
       if (e.state() == ALL_IDLE && connectionIdleTimeoutMillis > 0) {
         final TransferableMdc mdc = TransferableMdc.current();
         ctx.close()
             .addListener((final ChannelFuture channelFuture) -> {
-              try (final TransferableMdc mdcTmp = mdc.apply()) {
+              try (final TransferableMdc ignored = mdc.apply()) {
                 ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE.operationComplete(channelFuture);
               }
             });
@@ -170,6 +169,7 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
    * @param failure A {@link Throwable} that was thrown during {@linkplain RequestDispatcher#process(java.lang.Object) processing}
    * the {@code request},or during {@linkplain ChannelHandlerContext#writeAndFlush(java.lang.Object) sending}
    * a response, or during some other operations related to the {@code request} or the current {@link Channel}.
+   *
    * @return {@code null}.
    */
   @Nullable
@@ -193,6 +193,7 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
    * @param failure A {@link Throwable} that was thrown during {@linkplain RequestDispatcher#process(java.lang.Object) processing}
    * the {@code request},or during {@linkplain ChannelHandlerContext#writeAndFlush(java.lang.Object) sending}
    * the {@code response}, or during some other operations related to the {@code request} or the current {@link Channel}.
+   *
    * @return {@code true} if {@linkplain #getConnectionIdleTimeoutMillis() connection idle timeout}
    * is {@code 0} and {@code failure} isn't {@code null}.
    */
@@ -211,6 +212,7 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
    * @param sendFailure A {@link Throwable} that was thrown during {@linkplain ChannelHandlerContext#writeAndFlush(java.lang.Object) sending}
    * the {@code response}. This {@link Throwable} will be {@linkplain ChannelPipeline#fireExceptionCaught(java.lang.Throwable) fired}
    * if this method will return {@code true}.
+   *
    * @return {@code true}.
    */
   protected boolean fireExceptionOnResponseWriteFailure(
@@ -225,7 +227,7 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
   private final void respond(final ChannelHandlerContext ctx, @Nullable final RQ request, final CompletionStage<? extends RS> futureResponse) {
     final TransferableMdc mdc = TransferableMdc.current();
     futureResponse.whenComplete((response, failure) -> {
-      try (final TransferableMdc mdcTmp = mdc.apply()) {
+      try (final TransferableMdc ignored = mdc.apply()) {
         @Nullable
         ChannelFuture futureSend = null;
         try {
@@ -240,14 +242,15 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
         } finally {
           if (futureSend == null) {//channel is inactive, or any unexpected situation has happened
             try {
-              ctx.channel().close();
+              ctx.channel()
+                  .close();
             } finally {
               release(request);
             }
           } else {
             final TransferableMdc mdc2 = TransferableMdc.current();
             futureSend.addListener((ChannelFuture future) -> {
-              try (final TransferableMdc mdcTmp2 = mdc2.apply()) {
+              try (final TransferableMdc ignored2 = mdc2.apply()) {
                 try {
                   if (future.isSuccess()) {
                     if (closeChannelAfterResponse(request, response, failure)) {
@@ -303,8 +306,7 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
   }
 
   private final IdleStateHandler addIdleStateHandler(final String selfName, final ChannelPipeline pipe) {
-    @Nullable
-    final ChannelHandler idleStateHandler = pipe.get(IdleStateHandler.class);
+    @Nullable final ChannelHandler idleStateHandler = pipe.get(IdleStateHandler.class);
     if (idleStateHandler != null) {
       throw new RuntimeException(
           String.format("%s %s is already in the %s", IdleStateHandler.class.getSimpleName(), idleStateHandler, pipe));
@@ -315,8 +317,7 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
   }
 
   private static MonoHandler addMonoHandler(final String selfName, final ChannelPipeline pipe) {
-    @Nullable
-    final ChannelHandler monoHandler = pipe.get(MonoHandler.class);
+    @Nullable final ChannelHandler monoHandler = pipe.get(MonoHandler.class);
     if (monoHandler != null) {
       throw new RuntimeException(
           String.format("%s %s is already in the %s", MonoHandler.class.getSimpleName(), monoHandler, pipe));
@@ -328,7 +329,7 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
 
   private static final void release(@Nullable Object o) {
     if (o instanceof ReferenceCounted) {
-      final ReferenceCounted rc = ((ReferenceCounted) o);
+      final ReferenceCounted rc = ((ReferenceCounted)o);
       if (rc.refCnt() > 0) {
         rc.release();
       }

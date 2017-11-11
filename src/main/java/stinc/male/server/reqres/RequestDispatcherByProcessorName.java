@@ -36,8 +36,7 @@ public abstract class RequestDispatcherByProcessorName<RQ, RS> implements Reques
   public final CompletionStage<RS> process(final RQ request) {
     checkNotNull(request, "The argument must not be null", "request");
     final String processorName = getProcessorName(request);
-    @Nullable
-    final RequestProcessor<? super RQ, RS> processor = processors.get(processorName);
+    @Nullable final RequestProcessor<? super RQ, RS> processor = processors.get(processorName);
     if (processor == null) {
       throw new RuntimeException(String.format("Unknown %s's name %s. Available processors are %s",
           RequestProcessor.class.getSimpleName(), processorName, processors));

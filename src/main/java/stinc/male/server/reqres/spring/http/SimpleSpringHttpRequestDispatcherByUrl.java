@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class SimpleSpringHttpRequestDispatcherByUrl
     extends SpringRequestDispatcher<RequestWithMetadata<? extends FullHttpRequest>, FullHttpResponse> {
   private static final class InnerUrlDispatcher extends SimpleHttpRequestDispatcherByUrl {
-    public InnerUrlDispatcher(final String contextPath) {
+    private InnerUrlDispatcher(final String contextPath) {
       super(Collections.emptyMap(), contextPath);
     }
 

@@ -18,6 +18,7 @@ public final class ThrowableUtil {
    * @param <T> Type of a {@link Throwable} to extract.
    * @param t {@link Throwable} from which to extract a {@link Throwable} of type {@code extract}.
    * @param extract An instance of {@link Class} that represents type of a {@link Throwable} to extract.
+   *
    * @return {@link Optional} with extracted {@link Throwable} of type {@code extract} or {@code null}.
    */
   public static final <T extends Throwable> Optional<T> extract(@Nullable Throwable t, final Class<T> extract) {

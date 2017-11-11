@@ -54,7 +54,7 @@ public class HttpDispatchMonoHandler extends DispatchMonoHandler<RequestWithMeta
     if (msg instanceof RequestWithMetadata) {
       super.channelRead(ctx, msg);
     } else {
-      super.channelRead(ctx, new RequestWithMetadata<>((FullHttpRequest) msg));
+      super.channelRead(ctx, new RequestWithMetadata<>((FullHttpRequest)msg));
     }
   }
 
@@ -65,11 +65,14 @@ public class HttpDispatchMonoHandler extends DispatchMonoHandler<RequestWithMeta
         .ifPresent(e -> result.setStatus(BAD_REQUEST));
     ThrowableUtil.extract(failure, ExternallyVisibleException.class)
         .ifPresent(e -> HttpUtil.setPlainTextUtf8Content(result, e.getExternalMessage()));
-    logger.error(String.format("Processing of the %s has failed. Responding with %s", request == null ? "<unknown request>" : request, result), failure);
+    logger.error(
+        String.format("Processing of the %s has failed. Responding with %s", request == null ? "<unknown request>" : request, result),
+        failure);
     return result;
   }
 
-  private static final class HttpRequestDispatcherWrapper implements RequestDispatcher<RequestWithMetadata<? extends FullHttpRequest>, FullHttpResponse> {
+  private static final class HttpRequestDispatcherWrapper
+      implements RequestDispatcher<RequestWithMetadata<? extends FullHttpRequest>, FullHttpResponse> {
     private final RequestDispatcher<RequestWithMetadata<? extends FullHttpRequest>, FullHttpResponse> dispatcher;
 
     private HttpRequestDispatcherWrapper(final RequestDispatcher<RequestWithMetadata<? extends FullHttpRequest>, FullHttpResponse> dispatcher) {

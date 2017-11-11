@@ -191,7 +191,8 @@
             <showDeprecation>true</showDeprecation>
             <compilerArgs>
               <arg>-Werror</arg>
-              <arg>-Xlint:all,-try,-processing,-requires-automatic,-requires-transitive-automatic</arg>
+              <!-- TODO Option -Xlint:exports is disabled because of https://github.com/stIncMale/javac9-Xlint-exports-OOM -->
+              <arg>-Xlint:all,-exports,-try,-processing,-requires-automatic,-requires-transitive-automatic</arg>
             </compilerArgs>
           </configuration>
         </plugin>

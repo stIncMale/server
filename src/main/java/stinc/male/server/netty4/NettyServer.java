@@ -60,7 +60,7 @@ public class NettyServer extends AbstractServer {
         logger.info("{} is listening to {}", this, channel.localAddress());
         channel.closeFuture()
             .addListener(futureClose -> {
-              try (final TransferableMdc mdcTmp = mdc.apply()) {
+              try (final TransferableMdc ignored = mdc.apply()) {
                 if (futureClose.isSuccess()) {
                   futureStop.complete(null);
                 } else if (futureClose.isCancelled()) {
@@ -87,7 +87,7 @@ public class NettyServer extends AbstractServer {
         shutdownEventLoopGroup(sBootstrap.config()
             .childGroup()))
         .whenComplete((nothing, cause) -> {
-          try (final TransferableMdc mdcTmp = mdc.apply()) {
+          try (final TransferableMdc ignored = mdc.apply()) {
             if (cause == null) {
               futureStop.complete(null);
             } else if (cause instanceof CancellationException) {
@@ -107,7 +107,7 @@ public class NettyServer extends AbstractServer {
       final TransferableMdc mdc = TransferableMdc.current();
       eventLoopGroup.shutdownGracefully()
           .addListener(futureShutdown -> {
-            try (final TransferableMdc mdcTmp = mdc.apply()) {
+            try (final TransferableMdc ignored = mdc.apply()) {
               if (futureShutdown.isSuccess()) {
                 result.complete(null);
               } else if (futureShutdown.isCancelled()) {

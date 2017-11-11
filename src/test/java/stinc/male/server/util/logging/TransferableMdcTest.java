@@ -34,13 +34,14 @@ public final class TransferableMdcTest {//a fully functional implementation of S
     executor.submit(() -> {
       final String value = "v";
       MDC.put(key, value);
-      try (final TransferableMdc mdcTmp = mdc.apply()) {
+      try (final TransferableMdc ignored = mdc.apply()) {
         assertSame(valueTransferred, MDC.get(keyTransferred));
         assertSame(value, MDC.get(key));
       }
       assertNull(MDC.get(keyTransferred));
       assertSame(value, MDC.get(key));
-    }).get();
+    })
+        .get();
     assertSame(valueTransferred, MDC.get(keyTransferred));
     assertNull(MDC.get(key));
   }
