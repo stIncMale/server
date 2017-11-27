@@ -2,11 +2,11 @@ package stinc.male.server.util.logging;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.junit.AfterClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
 import org.slf4j.MDC;
-import static junit.framework.TestCase.assertNull;
-import static junit.framework.TestCase.assertSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 public final class TransferableMdcTest {//a fully functional implementation of SLF4J is required for these tests to succeed
   private static volatile ExecutorService executor;
@@ -16,8 +16,8 @@ public final class TransferableMdcTest {//a fully functional implementation of S
     executor.submit(() -> {});//this task forces the executor to pre-initialize a thread
   }
 
-  @AfterClass
-  public static final void afterClass() {
+  @AfterAll
+  public static final void afterAll() {
     executor.shutdownNow();
   }
 

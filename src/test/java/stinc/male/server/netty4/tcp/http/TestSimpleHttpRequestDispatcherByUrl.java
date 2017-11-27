@@ -2,12 +2,12 @@ package stinc.male.server.netty4.tcp.http;
 
 import static io.netty.handler.codec.http.HttpMethod.GET;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_0;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 import stinc.male.server.netty4.RequestWithMetadata;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
 import java.util.HashMap;
-import org.junit.Test;
 
 public final class TestSimpleHttpRequestDispatcherByUrl {
   @Test

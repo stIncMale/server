@@ -1,8 +1,6 @@
 package stinc.male.server;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.jupiter.api.Test;
 import stinc.male.server.netty4.NettyServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -14,7 +12,9 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Future;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class TestNettyServer {
   public TestNettyServer() {
@@ -43,7 +43,7 @@ public final class TestNettyServer {
     final NettyServer server = new NettyServer(sBootstrap);
     final Future<Void> futureCompletion = server.start();
     if (futureCompletion.isCancelled()) {
-      fail();
+      fail("");
     } else if (futureCompletion.isDone()) {
       futureCompletion.get();//an exception will be thrown if futureCompletion is completed exceptionally
     }

@@ -22,6 +22,7 @@
   </organization>
   <properties>
     <log4j.version>2.9.1</log4j.version>
+    <junit-jupiter.version>5.0.1</junit-jupiter.version>
     <spring.version>5.0.0.RELEASE</spring.version>
     <netty4.version>4.1.16.Final</netty4.version>
     <server.charset>UTF-8</server.charset>
@@ -107,14 +108,19 @@
         <version>2.3</version>
       </dependency>
       <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.12</version>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit-jupiter.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-test</artifactId>
         <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apiguardian</groupId>
+        <artifactId>apiguardian-api</artifactId>
+        <version>1.0.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -154,11 +160,6 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <scope>test</scope>
@@ -171,6 +172,16 @@
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apiguardian</groupId><!-- required because of JUnit5 -->
+      <artifactId>apiguardian-api</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -191,7 +202,7 @@
             <showDeprecation>true</showDeprecation>
             <compilerArgs>
               <arg>-Werror</arg>
-              <!-- TODO Option -Xlint:exports is disabled because of https://github.com/stIncMale/javac9-Xlint-exports-OOM -->
+              <!-- TODO Option -Xlint:exports is disabled because of http://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8191112 -->
               <arg>-Xlint:all,-exports,-try,-processing,-requires-automatic,-requires-transitive-automatic</arg>
             </compilerArgs>
           </configuration>
@@ -220,6 +231,18 @@
             <parallel>${server.maven-surefire-plugin.parallel}</parallel>
             <threadCount>5</threadCount>
           </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>org.junit.platform</groupId>
+              <artifactId>junit-platform-surefire-provider</artifactId>
+              <version>1.0.1</version>
+            </dependency>
+            <dependency>
+              <groupId>org.junit.jupiter</groupId>
+              <artifactId>junit-jupiter-engine</artifactId>
+              <version>${junit-jupiter.version}</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
