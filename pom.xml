@@ -245,6 +245,7 @@
               <link>https://www.kovalenko.link/jsr-305/javadoc/</link>
               <link>https://guava.dev/releases/29.0-jre/api/docs/</link>
               <link>https://docs.spring.io/spring/docs/5.2.7.RELEASE/javadoc-api/</link>
+              <link>https://www.slf4j.org/apidocs/</link>
             </links>
             <validateLinks>true</validateLinks>
             <includeDependencySources>false</includeDependencySources>

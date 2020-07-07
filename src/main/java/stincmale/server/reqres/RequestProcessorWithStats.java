@@ -42,7 +42,7 @@ public final class RequestProcessorWithStats<RQ, RS> implements RequestProcessor
     final TransferableMdc mdc = TransferableMdc.current();
     return processor.process(request)
         .handle((response, failure) -> {
-          try (final TransferableMdc ignored = mdc.apply()) {
+          try (var transferredMdc = mdc.transfer()) {
             final long endInstantMillis = System.currentTimeMillis();
             collectStats(endInstantMillis - beginInstantMillis);
             if (failure != null) {

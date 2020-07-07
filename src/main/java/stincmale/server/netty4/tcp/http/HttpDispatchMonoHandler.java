@@ -85,7 +85,7 @@ public class HttpDispatchMonoHandler extends DispatchMonoHandler<RequestWithMeta
       final TransferableMdc mdc = TransferableMdc.current();
       return dispatcher.process(request)
           .handle((httpResponse, failure) -> {
-            try (final TransferableMdc mdcTmp = mdc.apply()) {
+            try (var transferredMdc = mdc.transfer()) {
               if (failure != null) {
                 throw new RuntimeException(failure);
               }

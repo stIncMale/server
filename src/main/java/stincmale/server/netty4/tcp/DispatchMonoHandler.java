@@ -128,7 +128,7 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
         final TransferableMdc mdc = TransferableMdc.current();
         ctx.close()
             .addListener((final ChannelFuture channelFuture) -> {
-              try (final TransferableMdc ignored = mdc.apply()) {
+              try (var transferredMdc = mdc.transfer()) {
                 ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE.operationComplete(channelFuture);
               }
             });
@@ -227,7 +227,7 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
   private final void respond(final ChannelHandlerContext ctx, @Nullable final RQ request, final CompletionStage<? extends RS> futureResponse) {
     final TransferableMdc mdc = TransferableMdc.current();
     futureResponse.whenComplete((response, failure) -> {
-      try (final TransferableMdc ignored = mdc.apply()) {
+      try (var transferredMdc = mdc.transfer()) {
         @Nullable
         ChannelFuture futureSend = null;
         try {
@@ -250,7 +250,7 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
           } else {
             final TransferableMdc mdc2 = TransferableMdc.current();
             futureSend.addListener((ChannelFuture future) -> {
-              try (final TransferableMdc ignored2 = mdc2.apply()) {
+              try (var transferredMdc2 = mdc2.transfer()) {
                 try {
                   if (future.isSuccess()) {
                     if (closeChannelAfterResponse(request, response, failure)) {

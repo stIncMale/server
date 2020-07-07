@@ -26,7 +26,7 @@ public final class TestExampleSpringHttpServer {
   private static final String request(final String url) throws Exception {
     final URLConnection connection = new URL(url).openConnection();
     final String result;
-    try (final BufferedReader data = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+    try (BufferedReader data = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
       result = data.readLine();
     }
     return result;
@@ -63,11 +63,11 @@ public final class TestExampleSpringHttpServer {
     connection.setRequestMethod("POST");
     connection.setChunkedStreamingMode(1000);
     try {
-      try (final OutputStream out = connection.getOutputStream()) {
+      try (OutputStream out = connection.getOutputStream()) {
         out.write(new byte[5000]);
         out.flush();
       }
-      try (final BufferedReader data = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+      try (BufferedReader data = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
         assertEquals(TestExampleSpringHttpServer_RootProcessor.RESPONSE, data.readLine());
       }
     } finally {
