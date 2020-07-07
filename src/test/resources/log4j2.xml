@@ -17,7 +17,7 @@
     <Root level="error">
       <AppenderRef ref="stdout"/>
     </Root>
-    <Logger name="stinc.male.server" additivity="false" level="all">
+    <Logger name="stincmale.server" additivity="false" level="all">
       <AppenderRef ref="stdout"/>
     </Logger>
   </Loggers>

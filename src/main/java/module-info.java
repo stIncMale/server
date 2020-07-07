@@ -1,9 +1,9 @@
-import stinc.male.server.netty4.tcp.MonoHandler;
-import stinc.male.server.netty4.tcp.http.HttpRequestProcessor;
-import stinc.male.server.netty4.tcp.http.SimpleHttpRequestDispatcherByUrl;
-import stinc.male.server.reqres.Processor;
-import stinc.male.server.reqres.RequestProcessor;
-import stinc.male.server.reqres.spring.SpringRequestDispatcher;
+import stincmale.server.netty4.tcp.MonoHandler;
+import stincmale.server.netty4.tcp.http.HttpRequestProcessor;
+import stincmale.server.netty4.tcp.http.SimpleHttpRequestDispatcherByUrl;
+import stincmale.server.reqres.Processor;
+import stincmale.server.reqres.RequestProcessor;
+import stincmale.server.reqres.spring.SpringRequestDispatcher;
 
 /**
  * A server framework based on <a href="https://netty.io/">Netty</a>.
@@ -18,7 +18,7 @@ import stinc.male.server.reqres.spring.SpringRequestDispatcher;
  *   with {@linkplain MonoHandler responses ordered the same as requests}.</li>
  * </ul>
  */
-module stinc.male.server {
+module stincmale.server {
   requires org.slf4j;
   requires com.google.common;
   requires org.apache.commons.lang3;
@@ -26,11 +26,11 @@ module stinc.male.server {
   requires transitive io.netty.all;
   requires transitive java.dogstatsd.client;
   requires transitive spring.context;
-  exports stinc.male.server;
-  exports stinc.male.server.netty4;
-  exports stinc.male.server.netty4.tcp;
-  exports stinc.male.server.netty4.tcp.http;
-  exports stinc.male.server.reqres;
-  exports stinc.male.server.reqres.spring;
-  exports stinc.male.server.reqres.spring.http;
+  exports stincmale.server;
+  exports stincmale.server.netty4;
+  exports stincmale.server.netty4.tcp;
+  exports stincmale.server.netty4.tcp.http;
+  exports stincmale.server.reqres;
+  exports stincmale.server.reqres.spring;
+  exports stincmale.server.reqres.spring.http;
 }

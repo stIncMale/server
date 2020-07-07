@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <groupId>stinc.male.server</groupId>
+  <groupId>stincmale.server</groupId>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>server</artifactId>
   <version>0.0.0-SNAPSHOT</version>
@@ -199,10 +199,10 @@
           <version>3.0.0-M5</version>
           <configuration>
             <argLine>
-              --add-opens stinc.male.server/stinc.male.server.example=ALL-UNNAMED
-              --add-opens stinc.male.server/stinc.male.server.example=spring.context
-              --add-opens stinc.male.server/stinc.male.server.reqres.spring.test=ALL-UNNAMED
-              --add-exports stinc.male.server/stinc.male.server.reqres.spring.test=spring.context
+              --add-opens stincmale.server/stincmale.server.example=ALL-UNNAMED
+              --add-opens stincmale.server/stincmale.server.example=spring.context
+              --add-opens stincmale.server/stincmale.server.reqres.spring.test=ALL-UNNAMED
+              --add-exports stincmale.server/stincmale.server.reqres.spring.test=spring.context
             </argLine>
             <trimStackTrace>false</trimStackTrace>
             <parallel>${server.maven-surefire-plugin.parallel}</parallel>
