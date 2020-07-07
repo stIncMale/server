@@ -1,4 +1,4 @@
-package stinc.male.server.reqres.spring;
+package stinc.male.server.reqres.spring.test;
 
 import javax.inject.Inject;
 import org.junit.jupiter.api.Test;
@@ -9,13 +9,14 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import stinc.male.server.reqres.spring.SpringRequestDispatcher;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {TestSpringRequestDispatcher.SpringConfig.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public final class TestSpringRequestDispatcher {
   @Configuration
-  @ComponentScan(basePackages = {"stinc.male.server.reqres.spring"})
+  @ComponentScan(basePackages = {"stinc.male.server.reqres.spring.test"})
   static class SpringConfig {
     SpringConfig() {
     }

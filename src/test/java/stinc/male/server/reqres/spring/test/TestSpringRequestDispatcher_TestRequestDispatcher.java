@@ -1,9 +1,10 @@
-package stinc.male.server.reqres.spring;
+package stinc.male.server.reqres.spring.test;
 
 import javax.annotation.concurrent.ThreadSafe;
 import javax.inject.Inject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import stinc.male.server.reqres.spring.SpringRequestDispatcher;
 
 @Component
 @ThreadSafe

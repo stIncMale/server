@@ -8,6 +8,9 @@
   <version>0.0.0-SNAPSHOT</version>
   <name>Server</name>
   <packaging>jar</packaging>
+  <description>
+    A server framework based on Netty.
+  </description>
   <url>${server.url}</url>
   <licenses>
     <license>
@@ -15,52 +18,32 @@
       <url>${server.licenseUrl}</url>
     </license>
   </licenses>
-  <inceptionYear>${server.inceptionYear}</inceptionYear>
-  <organization>
-    <name>${server.organizationName}</name>
-    <url>${server.organizationUrl}</url>
-  </organization>
+  <inceptionYear>2017</inceptionYear>
+  <developers>
+    <developer>
+      <id>stIncMale</id>
+      <name>Valiantsin Kavalenka</name>
+      <email>public.vkovalenko@gmail.com</email>
+      <url>https://www.kovalenko.link</url>
+    </developer>
+  </developers>
   <properties>
-    <log4j.version>2.9.1</log4j.version>
-    <junit-jupiter.version>5.0.1</junit-jupiter.version>
-    <spring.version>5.0.0.RELEASE</spring.version>
-    <netty4.version>4.1.16.Final</netty4.version>
-    <server.charset>UTF-8</server.charset>
-    <project.build.sourceEncoding>${server.charset}</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>${server.charset}</project.reporting.outputEncoding>
+    <log4j.version>2.13.3</log4j.version>
+    <junit-jupiter.version>5.6.2</junit-jupiter.version>
+    <spring.version>5.2.7.RELEASE</spring.version>
+    <netty4.version>4.1.50.Final</netty4.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
     <server.url>https://github.com/stIncMale/server</server.url>
     <server.licenseName>WTFPL</server.licenseName>
     <server.licenseUrl>http://www.wtfpl.net/</server.licenseUrl>
-    <server.inceptionYear>2017</server.inceptionYear>
-    <server.organizationName>Valentin Kovalenko</server.organizationName>
-    <server.organizationUrl>https://sites.google.com/site/aboutmale/</server.organizationUrl>
   </properties>
-  <repositories>
-    <repository>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>central</id>
-      <name>bintray</name>
-      <url>http://jcenter.bintray.com</url>
-    </repository>
-  </repositories>
-  <pluginRepositories>
-    <pluginRepository>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>central</id>
-      <name>bintray-plugins</name>
-      <url>http://jcenter.bintray.com</url>
-    </pluginRepository>
-  </pluginRepositories>
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
-        <version>3.6</version>
+        <version>3.10</version>
       </dependency>
       <dependency>
         <groupId>io.netty</groupId>
@@ -70,7 +53,7 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.7.25</version>
+        <version>1.7.30</version>
       </dependency>
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
@@ -90,7 +73,7 @@
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>23.2-jre</version>
+        <version>29.0-jre</version>
       </dependency>
       <dependency>
         <groupId>javax.inject</groupId>
@@ -105,7 +88,7 @@
       <dependency>
         <groupId>com.datadoghq</groupId>
         <artifactId>java-dogstatsd-client</artifactId>
-        <version>2.3</version>
+        <version>2.10.1</version>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
@@ -116,11 +99,6 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-test</artifactId>
         <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apiguardian</groupId>
-        <artifactId>apiguardian-api</artifactId>
-        <version>1.0.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -179,11 +157,6 @@
       <artifactId>junit-jupiter-api</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.apiguardian</groupId><!-- required because of JUnit5 -->
-      <artifactId>apiguardian-api</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   <build>
     <pluginManagement>
@@ -191,18 +164,16 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.7.0</version>
+          <version>3.8.1</version>
           <configuration>
-            <source>9</source>
-            <target>9</target>
-            <encoding>${server.charset}</encoding>
+            <source>14</source>
+            <target>14</target>
             <debug>true</debug>
             <debuglevel>lines,vars,source</debuglevel>
             <showWarnings>true</showWarnings>
             <showDeprecation>true</showDeprecation>
             <compilerArgs>
               <arg>-Werror</arg>
-              <!-- TODO Option -Xlint:exports is disabled because of http://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8191112 -->
               <arg>-Xlint:all,-exports,-try,-processing,-requires-automatic,-requires-transitive-automatic</arg>
             </compilerArgs>
           </configuration>
@@ -210,7 +181,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
+          <version>3.2.0</version>
           <configuration>
             <archive>
               <addMavenDescriptor>false</addMavenDescriptor>
@@ -225,18 +196,19 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.19.1</version>
+          <version>3.0.0-M5</version>
           <configuration>
+            <argLine>
+              --add-opens stinc.male.server/stinc.male.server.example=ALL-UNNAMED
+              --add-opens stinc.male.server/stinc.male.server.example=spring.context
+              --add-opens stinc.male.server/stinc.male.server.reqres.spring.test=ALL-UNNAMED
+              --add-exports stinc.male.server/stinc.male.server.reqres.spring.test=spring.context
+            </argLine>
             <trimStackTrace>false</trimStackTrace>
             <parallel>${server.maven-surefire-plugin.parallel}</parallel>
             <threadCount>5</threadCount>
           </configuration>
           <dependencies>
-            <dependency>
-              <groupId>org.junit.platform</groupId>
-              <artifactId>junit-platform-surefire-provider</artifactId>
-              <version>1.0.1</version>
-            </dependency>
             <dependency>
               <groupId>org.junit.jupiter</groupId>
               <artifactId>junit-jupiter-engine</artifactId>
@@ -247,54 +219,36 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.0.0-M1</version>
+          <version>3.2.0</version>
           <configuration>
-            <detectJavaApiLink>false</detectJavaApiLink>
-            <doctitle>Server ${project.version} Java Source Code Documentation</doctitle>
             <author>false</author>
             <show>protected</show>
             <linksource>false</linksource>
-            <bottom><![CDATA[<p>]]></bottom>
-            <charset>${server.charset}</charset>
-            <docencoding>${server.charset}</docencoding>
-            <encoding>${server.charset}</encoding>
             <header>
               <![CDATA[
-								<a href="${server.url}">Server</a>
-								<br></br>
-								Java Source Code Documentation
+								<a href="${server.url}">Server</a> ${project.version}
+								<br>
+								Java API Documentation
 							]]>
             </header>
             <footer>
               <![CDATA[Licensed under <a href="${server.licenseUrl}">${server.licenseName}</a>]]>
             </footer>
             <locale>en</locale>
-            <windowtitle>Server Java Source Code Documentation</windowtitle>
-            <groups>
-              <group>
-                <title>Server</title>
-                <packages>
-                  stinc.male.server:stinc.male.server.util:stinc.male.server.util.*:stinc.male.server.reqres:stinc.male.server.reqres.*
-                </packages>
-              </group>
-              <group>
-                <title>Netty4</title>
-                <packages>
-                  stinc.male.server.netty4:stinc.male.server.netty4.*
-                </packages>
-              </group>
-            </groups>
+            <windowtitle>Server Java API Documentation</windowtitle>
+            <isOffline>false</isOffline>
             <links>
-              <link>http://docs.oracle.com/javase/9/docs/api/</link>
-              <link>http://docs.oracle.com/javaee/7/api/</link>
-              <link>http://stincmale.github.io/jsr-305/javadoc/</link>
-              <link>https://google.github.io/guava/releases/23.0/api/docs/</link>
+              <link>https://cr.openjdk.java.net/~iris/se/14/spec/fr/java-se-14-fr-spec/api/</link>
+              <link>https://netty.io/4.1/api/</link>
+              <link>https://www.kovalenko.link/jsr-305/javadoc/</link>
+              <link>https://guava.dev/releases/29.0-jre/api/docs/</link>
+              <link>https://docs.spring.io/spring/docs/5.2.7.RELEASE/javadoc-api/</link>
             </links>
             <validateLinks>true</validateLinks>
             <includeDependencySources>false</includeDependencySources>
             <includeTransitiveDependencySources>false</includeTransitiveDependencySources>
-            <serialwarn>true</serialwarn>
-            <additionalparam>-Xdoclint:all -Xdoclint:-missing</additionalparam>
+            <serialwarn>false</serialwarn>
+            <additionalparam>-Xdoclint:all</additionalparam>
           </configuration>
           <executions>
             <execution>
@@ -309,11 +263,11 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
-          <version>3.0.1</version>
+          <version>3.2.1</version>
           <executions>
             <execution>
               <id>attach-sources</id>
-              <phase>verify</phase>
+              <phase>package</phase>
               <goals>
                 <goal>jar-no-fork</goal>
               </goals>
@@ -322,7 +276,7 @@
         </plugin>
       </plugins>
     </pluginManagement>
-    <defaultGoal>install</defaultGoal>
+    <defaultGoal>verify</defaultGoal>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -333,22 +287,12 @@
   <profiles>
     <profile>
       <id>default</id>
-      <properties>
-        <maven.test.skip>false</maven.test.skip>
-        <server.maven-surefire-plugin.parallel>suitesAndClasses</server.maven-surefire-plugin.parallel>
-      </properties>
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
-    </profile>
-    <profile>
-      <id>doc</id>
-      <!--TODO Will not work until https://issues.apache.org/jira/browse/MJAVADOC-489 is resolved;
-      javadoc -sourcepath ./src/main/java/
-      -subpackages stinc.male
-      - -module-path /Users/male/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar-->
       <properties>
-        <maven.test.skip>true</maven.test.skip>
+        <maven.test.skip>false</maven.test.skip>
+        <server.maven-surefire-plugin.parallel>suitesAndClasses</server.maven-surefire-plugin.parallel>
       </properties>
       <build>
         <plugins>

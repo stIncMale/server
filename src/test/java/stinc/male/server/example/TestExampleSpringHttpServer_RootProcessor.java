@@ -24,6 +24,7 @@ final class TestExampleSpringHttpServer_RootProcessor implements HttpRequestProc
 
   @Override
   public final CompletionStage<FullHttpResponse> process(final RequestWithMetadata<? extends FullHttpRequest> request) {
+    //synchronous processing, see TestExampleSpringHttpServer_HelloWorldProcessor for an example of asynchronous processing
     return CompletableFuture.completedFuture(
         HttpUtil.setPlainTextUtf8Content(HttpUtil.createHttpResponse(HTTP_1_1, OK), RESPONSE));
   }

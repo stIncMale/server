@@ -1,4 +1,4 @@
-package stinc.male.server.reqres.spring;
+package stinc.male.server.reqres.spring.test;
 
 import stinc.male.server.reqres.Processor;
 import stinc.male.server.reqres.RequestProcessor;
