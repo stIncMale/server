@@ -21,7 +21,7 @@ A server framework based on [Netty](https://netty.io/).
 
 ## [Building/contributing](https://github.com/stIncMale/server/blob/master/contributing.md)
 
-##Example
+## Example
 [A simple HTTP server](https://github.com/stIncMale/server/tree/master/src/test/java/stincmale/server/example)
 
 ---
