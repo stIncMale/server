@@ -1,0 +1,11 @@
+module:stincmale.server
+stincmale.server
+stincmale.server.netty4
+stincmale.server.netty4.tcp
+stincmale.server.netty4.tcp.http
+stincmale.server.netty4.tcp.http.util
+stincmale.server.netty4.util.channel
+stincmale.server.reqres
+stincmale.server.reqres.spring
+stincmale.server.reqres.spring.http
+stincmale.server.util.logging
