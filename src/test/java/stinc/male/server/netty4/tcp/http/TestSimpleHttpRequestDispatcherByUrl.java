@@ -10,6 +10,9 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import java.util.HashMap;
 
 public final class TestSimpleHttpRequestDispatcherByUrl {
+  public TestSimpleHttpRequestDispatcherByUrl() {
+  }
+
   @Test
   public final void getProcessorName1() {
     final SimpleHttpRequestDispatcherByUrl dispatcher = new SimpleHttpRequestDispatcherByUrl(new HashMap<>(), "");

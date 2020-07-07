@@ -8,8 +8,11 @@ import org.slf4j.MDC;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-public final class TransferableMdcTest {//a fully functional implementation of SLF4J is required for these tests to succeed
-  private static volatile ExecutorService executor;
+/**
+ * A fully functional implementation of SLF4J is required for these tests to succeed.
+ */
+public final class TransferableMdcTest {
+  private static final ExecutorService executor;
 
   static {
     executor = Executors.newSingleThreadExecutor();

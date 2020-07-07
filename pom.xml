@@ -235,6 +235,7 @@
             <footer>
               <![CDATA[Licensed under <a href="${server.licenseUrl}">${server.licenseName}</a>]]>
             </footer>
+            <bottom><![CDATA[&#x200b;]]></bottom>
             <locale>en</locale>
             <windowtitle>Server Java API Documentation</windowtitle>
             <isOffline>false</isOffline>

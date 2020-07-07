@@ -15,6 +15,9 @@ import stinc.male.server.reqres.spring.SpringRequestDispatcher;
 @ContextConfiguration(classes = {TestSpringRequestDispatcher.SpringConfig.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public final class TestSpringRequestDispatcher {
+  public TestSpringRequestDispatcher() {
+  }
+
   @Configuration
   @ComponentScan(basePackages = {"stinc.male.server.reqres.spring.test"})
   static class SpringConfig {

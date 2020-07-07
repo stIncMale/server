@@ -20,6 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ContextConfiguration(classes = {TestExampleSpringHttpServer_SpringConfig.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public final class TestExampleSpringHttpServer {
+  public TestExampleSpringHttpServer() {
+  }
+
   private static final String request(final String url) throws Exception {
     final URLConnection connection = new URL(url).openConnection();
     final String result;
