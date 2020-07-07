@@ -30,7 +30,10 @@ module stincmale.server {
   exports stincmale.server.netty4;
   exports stincmale.server.netty4.tcp;
   exports stincmale.server.netty4.tcp.http;
+  exports stincmale.server.netty4.tcp.http.util;
+  exports stincmale.server.netty4.util.channel;
   exports stincmale.server.reqres;
   exports stincmale.server.reqres.spring;
   exports stincmale.server.reqres.spring.http;
+  exports stincmale.server.util.logging;
 }
