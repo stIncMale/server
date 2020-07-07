@@ -1,5 +1,5 @@
 /**
- * Contains <a href="https://spring.io/">Spring</a>-specific functionality useful for request/response HTTP
+ * Contains <a href="https://spring.io/projects/spring-framework">Spring</a>-specific functionality useful for request/response HTTP
  * implementations of {@link stinc.male.server.Server}.
  */
 @javax.annotation.ParametersAreNonnullByDefault

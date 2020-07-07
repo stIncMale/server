@@ -223,6 +223,7 @@
           <configuration>
             <author>false</author>
             <show>protected</show>
+            <failOnWarnings>true</failOnWarnings>
             <linksource>false</linksource>
             <header>
               <![CDATA[

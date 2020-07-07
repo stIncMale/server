@@ -1,7 +1,8 @@
 package stinc.male.server.netty4.tcp.http;
 
-import com.google.common.base.Charsets;
+import java.nio.charset.StandardCharsets;
 import stinc.male.server.netty4.RequestWithMetadata;
+import stinc.male.server.reqres.Processor;
 import stinc.male.server.reqres.RequestProcessor;
 import stinc.male.server.reqres.RequestDispatcherByProcessorName;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -13,7 +14,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@link RequestDispatcherByProcessorName} that uses URI path of an HTTP request as the name of a
+ * {@link RequestDispatcherByProcessorName} that uses URI path of an HTTP request as the {@linkplain Processor#value() name} of a
  * {@link RequestProcessor}.
  */
 @ThreadSafe
@@ -55,11 +56,11 @@ public class SimpleHttpRequestDispatcherByUrl
     checkNotNull(request, "The argument %s must not be null", "request");
     final FullHttpRequest httpRequest = request.request();
     final String strUri = httpRequest.uri();
-    final QueryStringDecoder queryStringDecoder = new QueryStringDecoder(strUri, Charsets.UTF_8);
+    final QueryStringDecoder queryStringDecoder = new QueryStringDecoder(strUri, StandardCharsets.UTF_8);
     final String path = queryStringDecoder.path();
     final String result;
     if (path.startsWith(contextPath)) {
-      result = path.substring(contextPath.length(), path.length());
+      result = path.substring(contextPath.length());
     } else {
       result = path;
     }

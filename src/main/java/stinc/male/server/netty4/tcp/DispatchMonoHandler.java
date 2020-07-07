@@ -110,7 +110,7 @@ public class DispatchMonoHandler<RQ, RS> extends ChannelInboundHandlerAdapter {
     CompletionStage<? extends RS> futureResponse;
     try {
       futureResponse = dispatcher.process(request);
-    } catch (final VirtualMachineError e) {
+    } catch (final Error e) {
       throw e;
     } catch (final Throwable e) {
       final CompletableFuture<? extends RS> failureResponse = new CompletableFuture<>();

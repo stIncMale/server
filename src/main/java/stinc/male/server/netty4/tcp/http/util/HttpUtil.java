@@ -1,6 +1,5 @@
 package stinc.male.server.netty4.tcp.http.util;
 
-import com.google.common.base.Charsets;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -8,6 +7,7 @@ import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +34,7 @@ public final class HttpUtil {
     checkNotNull(httpResponse, "The argument %s must not be null", "httpResponse");
     final HttpHeaders responseHeaders = httpResponse.headers();
     if (content != null) {
-      final byte[] byteHttpResponseContent = content.getBytes(Charsets.UTF_8);
+      final byte[] byteHttpResponseContent = content.getBytes(StandardCharsets.UTF_8);
       httpResponse.content()
           .clear()
           .writeBytes(byteHttpResponseContent);

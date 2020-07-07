@@ -12,7 +12,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.Collection;
 import java.util.Collections;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**

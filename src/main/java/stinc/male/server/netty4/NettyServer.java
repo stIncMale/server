@@ -140,8 +140,7 @@ public class NettyServer extends AbstractServer {
    * </ul>
    * Accepted (child) channel options:
    * <ul>
-   * <li>{@link ChannelOption#WRITE_BUFFER_LOW_WATER_MARK} 8KiB</li>
-   * <li>{@link ChannelOption#WRITE_BUFFER_HIGH_WATER_MARK} 32KiB</li>
+   * <li>{@link ChannelOption#WRITE_BUFFER_WATER_MARK} {@link WriteBufferWaterMark#DEFAULT}</li>
    * <li>{@link ChannelOption#ALLOCATOR} {@link UnpooledByteBufAllocator#DEFAULT}</li>
    * </ul>
    * Note: if you want to use {@link PooledByteBufAllocator}, you have to release {@link ByteBuf} objects in your code.
@@ -153,7 +152,7 @@ public class NettyServer extends AbstractServer {
         .option(ChannelOption.SO_REUSEADDR, true)
         .option(ChannelOption.SO_BACKLOG, 50)
         .option(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT)
-        .childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(8 * 1024, 32 * 1024))
+        .childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, WriteBufferWaterMark.DEFAULT)
         .childOption(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT);
   }
 }

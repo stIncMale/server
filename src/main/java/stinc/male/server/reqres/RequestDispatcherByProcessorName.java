@@ -11,7 +11,7 @@ import java.util.concurrent.CompletionStage;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@link RequestDispatcher} that chooses {@link RequestProcessor}s by names.
+ * {@link RequestDispatcher} that chooses {@link RequestProcessor}s by {@linkplain Processor#value() names}.
  */
 @ThreadSafe
 public abstract class RequestDispatcherByProcessorName<RQ, RS> implements RequestDispatcher<RQ, RS> {

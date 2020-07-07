@@ -13,11 +13,13 @@ import java.util.LinkedList;
 import java.util.Queue;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
+import stinc.male.server.reqres.RequestDispatcher;
 
 /**
  * The purpose of this {@link ChannelDuplexHandler} is to allow asynchronous processing of inbound messages
  * while preserving the order of outbound response messages (which must correlate to the order of inbound messages)
  * and allowing a client to send a next request before receiving an answer to the previous request.
+ * If you want to use the {@link RequestDispatcher} functionality, then use this handler indirectly via {@link DispatchMonoHandler}.
  * <p>
  * Disables {@linkplain ChannelConfig#setAutoRead(boolean) auto read} and controls read operations by itself
  * (auto read is disabled in {@link #channelRegistered(ChannelHandlerContext)} and is enabled back again in
@@ -48,6 +50,8 @@ import javax.annotation.concurrent.NotThreadSafe;
  * and there must not be any other outbound messages.
  * Such an outbound message may later be encoded to an empty message, or just ignored
  * (one should use the {@link #VOID_OUTBOUND_MESSAGE} to accomplish this).
+ *
+ * @see DispatchMonoHandler
  */
 @NotThreadSafe
 public final class MonoHandler extends ChannelDuplexHandler {
@@ -92,12 +96,12 @@ public final class MonoHandler extends ChannelDuplexHandler {
 
   @Override
   public final void channelReadComplete(final ChannelHandlerContext ctx) throws Exception {
-    {//TODO a workaround for the problem described at https://github.com/netty/netty/commit/3e70b4ed99cbd29798a869bb3d7b3415ca8416e0
-      /*The problem is that ChannelHandlerContext.read may not produce any message,
-      hence ChannelInboundHandlerAdapter.channelRead may not be called after ChannelHandlerContext.read.
-      In order to work around this problem we have to call ChannelHandlerContext.read again and again
-      until it produces a message and causes ChannelInboundHandlerAdapter.channelRead to be called,
-      which sets upstreamOpen to false.*/
+    {
+      /* A workaround for the problem described at https://github.com/netty/netty/commit/3e70b4ed99cbd29798a869bb3d7b3415ca8416e0.
+       * The problem is that ChannelHandlerContext.read may not produce any message,
+       * hence ChannelInboundHandlerAdapter.channelRead may not be called after ChannelHandlerContext.read.
+       * In order to work around this problem we have to call ChannelHandlerContext.read again and again
+       * until it produces a message and causes ChannelInboundHandlerAdapter.channelRead to be called, which sets upstreamOpen to false.*/
       if (upstreamOpen) {
         ctx.read();
       }

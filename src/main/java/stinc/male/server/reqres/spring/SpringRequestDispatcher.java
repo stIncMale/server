@@ -10,6 +10,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.context.annotation.Bean;
 import stinc.male.server.reqres.Processor;
 import stinc.male.server.reqres.RequestDispatcher;
 import stinc.male.server.reqres.RequestDispatcherByProcessorName;
@@ -18,7 +19,7 @@ import stinc.male.server.reqres.RequestProcessorWithStats;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@link RequestDispatcherByProcessorName} that automatically searches for {@link RequestProcessor}s annotated with
+ * {@link RequestDispatcherByProcessorName} that automatically searches for {@link RequestProcessor}s {@linkplain Bean String beans} annotated with
  * {@code @}{@link Processor}.
  */
 @ThreadSafe
@@ -98,7 +99,6 @@ public abstract class SpringRequestDispatcher<RQ, RS> extends RequestDispatcherB
     return result;
   }
 
-  @SuppressWarnings("unchecked")
   private static <RQ, RS> RequestProcessorWithStats<RQ, RS> addStats(
       final RequestProcessor<RQ, RS> processor,
       @Nullable final StatsDClient statsDClient,
