@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A read-only {@link MDCAdapter} which allows to copy state of {@link MDC} between {@linkplain Thread threads}.
+ * A read-only {@link MDCAdapter} which allows to copy the state of {@link MDC} between {@linkplain Thread threads}.
  * <p>
- * This class is not thread-safe, but correctly transfers {@link MDC} if used according the provided idiom.
+ * This class is not thread-safe but correctly transfers {@link MDC} if used according to the provided idiom.
  * <p>
  * <b>Usage examples.</b>
  * <p>
@@ -20,17 +20,17 @@ import java.util.Map;
  * <pre>{@code
  * TransferableMdc outerMdc = TransferableMdc.current();
  * executor.submit(() -> {
- *  try (@SuppressWarnings("unused") TransferableMdc transferredMdc = outerMdc.transfer()) {
+ *  try (var transferredMdc = outerMdc.transfer()) {
  *      logger.info("This call can access contents of outerMdc via org.slf4j.MDC");
  *  }
- *  logger.info("This call can not access contents of outerMdc via org.slf4j.MDC");
+ *  logger.info("This call cannot access contents of outerMdc via org.slf4j.MDC");
  * });
  * }</pre>
  * <p>
  * <i>Incorrect 1:</i>
  * <pre>{@code
  * executor.submit(() -> {
- *  try (TransferableMdc transferredMdc = TransferableMdc.current().transfer()) {
+ *  try (var transferredMdc = TransferableMdc.current().transfer()) {
  *      //...
  *  }
  * });
@@ -41,12 +41,12 @@ import java.util.Map;
  * <pre>{@code
  * TransferableMdc outerMdc = TransferableMdc.current();
  * executor.submit(() -> {//task1
- *  try (TransferableMdc transferredMdc = outerMdc.transfer()) {
+ *  try (var transferredMdc = outerMdc.transfer()) {
  *      //...
  *  }
  * });
  * executor.submit(() -> {//task2
- *  try (TransferableMdc transferredMdc = outerMdc.transfer()) {
+ *  try (var transferredMdc = outerMdc.transfer()) {
  *      //...
  *  }
  * });
@@ -59,13 +59,13 @@ import java.util.Map;
  * <pre>{@code
  * TransferableMdc outerMdc1 = TransferableMdc.current();
  * executor.submit(() -> {//task1
- *  try (TransferableMdc transferredMdc = outerMdc1.transfer()) {
+ *  try (var transferredMdc = outerMdc1.transfer()) {
  *      //...
  *  }
  * });
  * TransferableMdc outerMdc2 = TransferableMdc.current();
  * executor.submit(() -> {//task2
- *  try (TransferableMdc transferredMdc = outerMdc2.transfer()) {
+ *  try (var transferredMdc = outerMdc2.transfer()) {
  *      //...
  *  }
  * });
@@ -97,8 +97,9 @@ public final class TransferableMdc implements MDCAdapter, Closeable {
   }
 
   /**
-   * Overrides the current {@link Thread}'s {@link MDC} with the state of {@link TransferableMdc}
-   * and retains original state of the current {@link MDC}.
+   * {@linkplain MDC#setContextMap(Map) Overrides} the {@linkplain Thread#currentThread() current thread's} {@link MDC}
+   * with the {@linkplain MDC#getCopyOfContextMap() state} of {@link TransferableMdc}
+   * and retains the original state of the current {@link MDC}.
    *
    * @return {@code this}.
    *
@@ -113,7 +114,8 @@ public final class TransferableMdc implements MDCAdapter, Closeable {
   }
 
   /**
-   * Restores current {@link Thread}'s {@link MDC} to its original state (before {@link #transfer()} was called).
+   * {@linkplain MDC#setContextMap(Map) Rolls back} the {@linkplain Thread#currentThread() current thread's} {@link MDC} to its original state
+   * (before {@link #transfer()} was called).
    *
    * @throws IllegalStateException if detects that the method is called more than once.
    * Such detection is not guaranteed and is provided on the best effort basis.
@@ -127,7 +129,7 @@ public final class TransferableMdc implements MDCAdapter, Closeable {
      * Obviously, it is possible to make it reliable, but not worth it because of the complexity and potential performance effects.
      * After all, all we are trying to accomplish here is to let a user know that the class is used incorrectly.*/
     if (backup == null) {
-      throw new IllegalStateException(getClass().getSimpleName() + " must not be reused and can not be closed more than once");
+      throw new IllegalStateException(getClass().getSimpleName() + " must not be reused and cannot be closed more than once");
     }
     MDC.setContextMap(backup);
     backup = null;
